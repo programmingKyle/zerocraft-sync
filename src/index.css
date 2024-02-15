@@ -112,7 +112,7 @@ select {
   display: grid;
   grid-gap: 5px;
   height: 100%;
-  grid-template-rows: 1fr;
+  grid-template-rows: auto 1fr;
   overflow: hidden;
 }
 
@@ -126,8 +126,8 @@ select {
 
 .frame-grid button {
   -webkit-app-region: no-drag;
-  width: 50px;
-  padding: 10px 0px;
+  font-size: 12px;
+  padding: 10px;
 }
 
 .container {
