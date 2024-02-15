@@ -57,14 +57,39 @@ ipcMain.handle('gist-handler', async (req, data) => {
   if (!data || !data.request) return;
   switch (data.request){
     case 'View':
-      const viewInfo = viewGist(data.gistId);
+      const viewInfo = viewGist(data.gistID);
       return viewInfo;
+    case 'Update':
+      console.log(data);
+      await updateGist(data.gistID, data.accessToken, data.updatedContent);
   }
 });
 
-async function viewGist(gistId){
+async function updateGist(gistID, accessToken, updatedContent) {
   try {
-    const response = await axios.get(`https://api.github.com/gists/${gistId}`);
+    const response = await axios.patch(
+      `https://api.github.com/gists/${gistID}`,
+      {
+        files: {
+          'server_status.json': {
+            content: JSON.stringify(updatedContent, null, 2),
+          },
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+  } catch (error) {
+    console.error('Error updating Gist:', error.response?.data || error.message);
+  }
+}
+
+async function viewGist(gistID){
+  try {
+    const response = await axios.get(`https://api.github.com/gists/${gistID}`);
     const fileContent = response.data.files['server_status.json'].content;
     const settings = JSON.parse(fileContent);
     return settings;
