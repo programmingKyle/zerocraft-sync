@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 let mainWindow;
 let isMaximized;
@@ -51,6 +52,21 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.handle('host-settings-handler', (req, data) => {
+  if (!data || !data.request) return;
+  switch(data.request) {
+    case 'Add':
+      addSettings(data.settings);
+      break;
+  }
+});
+
+function addSettings(settings) {
+  const jsonData = JSON.stringify(settings, null, 2);
+  fs.writeFileSync('settings.json', jsonData);
+}
+
+
 ipcMain.handle('frame-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request){
