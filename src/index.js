@@ -67,7 +67,6 @@ async function viewGist(gistId){
     const response = await axios.get(`https://api.github.com/gists/${gistId}`);
     const fileContent = response.data.files['server_status.json'].content;
     const settings = JSON.parse(fileContent);
-    console.log('Gist Content:', settings);
     return settings;
   } catch (error) {
     console.error('Error fetching Gist content:', error);

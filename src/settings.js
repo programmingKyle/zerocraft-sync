@@ -22,15 +22,9 @@ saveSettingsButton_el.addEventListener('click', async () => {
 
 document.addEventListener('DOMContentLoaded', async () => {
     settings = await api.hostSettingsHandler({request: 'Get'});
-    console.log(settings);
     if (settings === null){
         settingsOverlay_el.style.display = 'flex';
     } else {
         await getGist();
     }
 });
-
-async function getGist(){
-    const results = await api.gistHandler({request: 'View', gistId: settings.gistID});
-    console.log(results);
-}
