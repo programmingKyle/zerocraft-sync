@@ -1,7 +1,205 @@
 body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #1B1B1B;
+  overflow: hidden;
+  height: 100vh;
+  padding: 0px;
+  margin: 0px;
+}
+
+div {
+  padding: 0px;
+  margin: 0px;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-rows: auto auto;
+  overflow: hidden;
+  grid-gap: 5px;
+  text-align: center;
+  padding: 20px;
+}
+
+.server-info {
+  display: grid;
+  grid-gap: 5px;
+}
+
+.server-info-item {
+  display: grid;
+  text-align: center;
+  place-content: center;
+  background-color: #252525;
+}
+
+textarea {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+  Arial, sans-serif;
+  background-color: #252525;
+  color: #9593D9;
+  resize: none;
+  flex: 1;
+  border-radius: 3px;
+  border-style: none;
+  padding: 10px;
+  outline: none; /* Remove the focus outline */
+}
+
+input {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+  Arial, sans-serif;
+  background-color: #252525;
+  color: #9593D9;
+  border-radius: 3px;
+  border-style: none;
+  padding: 5px;
+  outline: none; /* Remove the focus outline */
+  min-width: 0;
+}
+
+input.error {
+  box-shadow: inset 0px 0px 5px #ff2b2b;
+}
+
+.buttons-grid {
+  display: grid;
+  grid-gap: 5px;
+}
+
+button {
+  background-color: #313131;
+  border-style: none;
+  color: white;
+  border-radius: 3px;
+}
+
+button:hover {
+  background-color: #252525
+}
+
+.input-button {
+  background-color: #3b4e92;
+  padding: 10px 0px;
+}
+
+.input-button:hover{
+  background-color: #889ADE;
+}
+
+.input-error {
+  box-shadow: inset 0 0 0 2px red; /* Adjust the width (2px in this case) based on your preference */
+}
+
+.inner-container {
+  background-color: #252525;
+  border-radius: 3px;
+}
+
+select {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+  Arial, sans-serif;
+  background-color: #252525;
+  color: #9593D9;
+  border-radius: 3px;
+  border-style: none;
+  padding: 5px;
+  outline: none; /* Remove the focus outline */
+  min-width: 0;
+}
+
+.base-grid {
+  display: grid;
+  grid-gap: 5px;
+  height: 100%;
+  grid-template-rows: 1fr;
+  overflow: hidden;
+}
+
+.frame-grid {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  grid-gap: 0px;
+  -webkit-app-region: drag;
+  background-color: #2B2B2B;
+}
+
+.frame-grid button {
+  -webkit-app-region: no-drag;
+  width: 50px;
+  padding: 10px 0px;
+}
+
+.container {
+  background-color: #313131;
+  border-radius: 3px;
+  text-align: center;
+  padding: 10px;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+  color: #9593D9;
+  text-align: left;
+  word-wrap: break-word; /* Enable text wrapping */
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.733); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.centered-container {
+  width: 500px;
+  background: #313131;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  display: grid;
+  grid-gap: 5px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  padding: 0px;
+  margin: 0px;
+  color: #F1F1F1;
+}
+
+.slim-button {
+  background-color: transparent;
+  color: #7C90DB;
+  border-style: none;
+  padding: 5px;
+}
+
+.slim-button:hover{
+  color: #889ADE;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: var(--scrollbar-color);
+  -webkit-box-shadow: inset 0 0 6px #9593D9;
+  cursor:pointer;
 }
