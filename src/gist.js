@@ -7,6 +7,7 @@ let gist;
 
 async function getGist(){
     gist = await api.gistHandler({request: 'View', gistID: settings.gistID, accessToken: settings.accessToken});
+    isServerOnline();
     await populateInfo(gist);
 }
 
@@ -37,6 +38,7 @@ async function updateGist(){
     }
     const updateSuccess = await api.gistHandler({request: 'Update', gistID: settings.gistID, accessToken: settings.accessToken, updatedContent});
     if (updateSuccess){
+        toggleServerStatus();
         await getGist();
     }
 }
