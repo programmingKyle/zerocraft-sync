@@ -6,14 +6,16 @@ const serverPortText_el = document.getElementById('serverPortText');
 let gist;
 
 async function getGist(){
-    gist = await api.gistHandler({request: 'View', gistID: settings.gistID});
-    populateInfo(gist);
+    gist = await api.gistHandler({request: 'View', gistID: settings.gistID, accessToken: settings.accessToken});
+    await populateInfo(gist);
 }
 
 async function populateInfo(data){
     serverStatusText_el.textContent = data.status;
     if (data.status === 'ONLINE'){
         serverStatusText_el.classList.add('online');
+    } else if (serverStatusText_el.classList.contains('online')){
+        serverStatusText_el.classList.remove('online');
     }
     serverNameText_el.textContent = data.servername;
     serverIPText_el.textContent = data.ip;
@@ -27,5 +29,8 @@ async function updateGist(){
         "ip": settings.ip,
         "port": '3306'
     }
-    await api.gistHandler({request: 'Update', gistID: settings.gistID, accessToken: settings.accessToken, updatedContent});
+    const updateSuccess = await api.gistHandler({request: 'Update', gistID: settings.gistID, accessToken: settings.accessToken, updatedContent});
+    if (updateSuccess){
+        await getGist();
+    }
 }

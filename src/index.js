@@ -57,11 +57,12 @@ ipcMain.handle('gist-handler', async (req, data) => {
   if (!data || !data.request) return;
   switch (data.request){
     case 'View':
-      const viewInfo = viewGist(data.gistID);
+      const viewInfo = viewGist(data.gistID, data.accessToken);
       return viewInfo;
     case 'Update':
       console.log(data);
-      await updateGist(data.gistID, data.accessToken, data.updatedContent);
+      const updateSuccess = await updateGist(data.gistID, data.accessToken, data.updatedContent);
+      return updateSuccess;
   }
 });
 
@@ -82,22 +83,30 @@ async function updateGist(gistID, accessToken, updatedContent) {
         },
       }
     );
+    return true;
   } catch (error) {
     console.error('Error updating Gist:', error.response?.data || error.message);
+    return false;
   }
 }
 
-async function viewGist(gistID){
+async function viewGist(gistID, accessToken) {
   try {
-    const response = await axios.get(`https://api.github.com/gists/${gistID}`);
+    const headers = {
+      'Authorization': `Bearer ${accessToken}`,
+    };
+
+    const response = await axios.get(`https://api.github.com/gists/${gistID}`, { headers });
+
     const fileContent = response.data.files['server_status.json'].content;
     const settings = JSON.parse(fileContent);
+
     return settings;
   } catch (error) {
     console.error('Error fetching Gist content:', error);
+    throw error;
   }
 }
-
 ipcMain.handle('host-settings-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request) {
