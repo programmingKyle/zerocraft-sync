@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const axios = require('axios');
 
 let mainWindow;
 let isMaximized;
@@ -52,23 +53,46 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.handle('gist-handler', async (req, data) => {
+  if (!data || !data.request) return;
+  switch (data.request){
+    case 'View':
+      const viewInfo = viewGist(data.gistId);
+      return viewInfo;
+  }
+});
+
+async function viewGist(gistId){
+  try {
+    const response = await axios.get(`https://api.github.com/gists/${gistId}`);
+    const fileContent = response.data.files['server_status.json'].content;
+    const settings = JSON.parse(fileContent);
+    console.log('Gist Content:', settings);
+    return settings;
+  } catch (error) {
+    console.error('Error fetching Gist content:', error);
+  }
+}
+
 ipcMain.handle('host-settings-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request) {
-    case 'Check':
-      const settingsExist = checkSettings();
-      return settingsExist;
+    case 'Get':
+      const settings = getSettings();
+      return settings;
     case 'Add':
       addSettings(data.settings);
       break;
   }
 });
 
-function checkSettings(){
+function getSettings(){
   if (fs.existsSync('settings.json')){
-    return true;
+    const settingsContent = fs.readFileSync('settings.json', 'utf-8');
+    const settings = JSON.parse(settingsContent);
+    return settings;
   } else {
-    return false;
+    return null;
   }
 }
 
