@@ -16,3 +16,11 @@ saveSettingsButton_el.addEventListener('click', async () => {
 
     await api.hostSettingsHandler({request: 'Add', settings: values});
 });
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const settingsExist = await api.hostSettingsHandler({request: 'Check'});
+    console.log(settingsExist);
+    if (!settingsExist){
+        settingsOverlay_el.style.display = 'flex';
+    }
+});

@@ -55,11 +55,22 @@ app.on('activate', () => {
 ipcMain.handle('host-settings-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request) {
+    case 'Check':
+      const settingsExist = checkSettings();
+      return settingsExist;
     case 'Add':
       addSettings(data.settings);
       break;
   }
 });
+
+function checkSettings(){
+  if (fs.existsSync('settings.json')){
+    return true;
+  } else {
+    return false;
+  }
+}
 
 function addSettings(settings) {
   const jsonData = JSON.stringify(settings, null, 2);
