@@ -14,7 +14,7 @@ div {
 
 .content-grid {
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: 1fr 1fr auto;
   overflow: hidden;
   grid-gap: 5px;
   text-align: center;
@@ -218,4 +218,12 @@ h1,h2,h3,h4,h5,h6 {
 
 h3.online {
   color: green;
+}
+
+.server-status {
+  font-size: 14px;
+  color: white;
+  margin: 0px;
+  padding: 0px;
+  background-color: black;
 }

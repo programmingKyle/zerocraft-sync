@@ -1,5 +1,7 @@
 const startServerButton_el = document.getElementById('startServerButton');
 const stopServerButton_el = document.getElementById('stopServerButton');
+const content_el = document.getElementById('content');
+const consoleText_el = document.getElementById('consoleText');
 
 let serverOnline = false;
 let isHost = true;
@@ -40,6 +42,9 @@ startServerButton_el.addEventListener('click', async () => {
         if (gist.status === 'OFFLINE'){
             await updateGist();
             await api.serverHandler({request: 'Start', directory: settings.directory});
+            if (isHost){
+                consoleText_el.style.display = 'grid';
+            }
         }
     }
 });
@@ -50,6 +55,13 @@ stopServerButton_el.addEventListener('click', async () => {
         if (gist.status === 'ONLINE'){
             await updateGist();
             await api.serverHandler({request: 'Stop'});
+            if (consoleText_el.style.display = 'grid'){
+                consoleText_el.style.display = 'none';
+            }
         }
     }
 });
+
+api.onServerStatusUpdate((status) => {
+    consoleText_el.textContent = status;
+})

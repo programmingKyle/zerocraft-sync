@@ -70,6 +70,10 @@ ipcMain.handle('server-handler', (req, data) => {
   }
 });
 
+ipcMain.on('server-status', (event, status) => {
+  mainWindow.webContents.send('server-status', status);
+});
+
 function stopServer(){
   if (serverProcess.stdin) {
     serverProcess.stdin.write('stop\n'); // Assuming the server process accepts "stop" for graceful shutdown
@@ -85,7 +89,15 @@ function startServer(directory) {
   });
 
   serverProcess.stdout.on('data', (data) => {
-    console.log(`${data}`);
+    if (data.includes('Starting')){
+      mainWindow.webContents.send('server-status', 'Starting');
+    } 
+    if (data.includes('started')){
+      mainWindow.webContents.send('server-status', 'Online');
+    }
+    if (data.includes('Quit')){
+      mainWindow.webContents.send('server-status', 'Offline');
+    }
     // Process stdout data here
   });
 
