@@ -2,7 +2,7 @@ const startServerButton_el = document.getElementById('startServerButton');
 const stopServerButton_el = document.getElementById('stopServerButton');
 
 let serverOnline = false;
-let isHost = false;
+let isHost = true;
 
 function isServerOnline(){
     if (gist.status === 'ONLINE'){
@@ -39,6 +39,7 @@ startServerButton_el.addEventListener('click', async () => {
         await getGist();
         if (gist.status === 'OFFLINE'){
             await updateGist();
+            await api.serverHandler({request: 'Start', directory: settings.directory});
         }
     }
 });
@@ -47,8 +48,8 @@ stopServerButton_el.addEventListener('click', async () => {
     if (serverOnline && isHost){
         await getGist();
         if (gist.status === 'ONLINE'){
-            console.log('Come on');
             await updateGist();
+            await api.serverHandler({request: 'Stop'});
         }
     }
 });

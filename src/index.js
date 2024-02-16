@@ -1,10 +1,14 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
+const { spawn } = require('child_process');
 
 let mainWindow;
 let isMaximized;
+
+let serverProcess;
+let serverDir; 
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -53,6 +57,58 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.handle('server-handler', (req, data) => {
+  console.log(data);
+  if (!data || !data.request) return;
+  switch (data.request){
+    case 'Start':
+      startServer(data.directory);
+      break;
+    case 'Stop':
+      stopServer(data.directory);
+      break;
+  }
+});
+
+function stopServer(){
+  if (serverProcess.stdin) {
+    serverProcess.stdin.write('stop\n'); // Assuming the server process accepts "stop" for graceful shutdown
+  } else {
+    console.error('Error: stdin is null');
+  }
+}
+
+function startServer(directory) {
+  serverDir = path.join(directory, 'bedrock_server.exe');
+  serverProcess = spawn(serverDir, {
+    stdio: ['pipe', 'pipe', 'pipe'], // Enable stdin, stdout, and stderr
+  });
+
+  serverProcess.stdout.on('data', (data) => {
+    console.log(`${data}`);
+    // Process stdout data here
+  });
+
+  serverProcess.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+    // Process stderr data here
+  });
+
+  serverProcess.on('error', (err) => {
+    console.error('Error starting server process:', err);
+  });
+
+  serverProcess.on('close', (code) => {
+    console.log(`Server process exited with code ${code}`);
+    // Perform actions when the process is closed
+  });
+
+  serverProcess.on('exit', (code) => {
+    console.log(`Server process exited with code ${code}`);
+    // Perform actions when the process exits
+  });
+}
+
 ipcMain.handle('select-directory', async (req, data) => {
   try {
     const result = await dialog.showOpenDialog({
