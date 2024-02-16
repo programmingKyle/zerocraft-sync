@@ -10,12 +10,16 @@
     <div id="settingsOverlay" class="overlay" style="display: none;">
       <div id="settingsContent" class="centered-container" style="text-align: center;">
         <div style="display: grid">
-          <h1 id="mediaTypeHeader">Host Settings</h1>
+          <h2 id="mediaTypeHeader">Host Settings</h2>
         </div>
         <input id="serverTitleInput" type="text" placeholder="Server Name" style="text-align: center;">
         <input id="gistIDInput" type="text" placeholder="Gist ID" style="text-align: center;">
         <input id="accessTokenInput" type="text" placeholder="Access Token" style="text-align: center;">
         <input id="ipInput" type="text" placeholder="Zerotier IP" style="text-align: center;">
+        <div style="display: grid; grid-template-columns: 1fr auto; grid-gap: 5px; width: 100%; place-content: center;">
+          <span id="selectedDirectoryText" class="selected-directory">Select Server Folder</span>
+          <button id="selectDirectoryButton" class="slim-button fas fa-folder"></button>
+        </div>
         <div style="display: grid;">
           <button id="saveSettingsButton" class="input-button">Save</button>
           <button id="backSettingsButton" class="input-button" style="display: none;">Add</button>

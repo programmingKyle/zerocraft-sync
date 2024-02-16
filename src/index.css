@@ -166,6 +166,7 @@ p {
   text-align: center;
   display: grid;
   height: 70%;
+  width: 75%;
   grid-gap: 5px;
 }
 
@@ -186,8 +187,19 @@ h1,h2,h3,h4,h5,h6 {
   color: #889ADE;
 }
 
+.selected-directory {
+  overflow: auto;
+  white-space: nowrap;
+  background-color: #252525;
+  padding: 5px;
+  border-radius: 3px;
+  color: #889ADE;
+  font-size: 13px;
+}
+
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
+  height: 5px;
 }
 
 /* Track */

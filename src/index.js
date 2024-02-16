@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
@@ -14,8 +14,8 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 300,
-    height: 400,
+    width: 400,
+    height: 350,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -53,6 +53,30 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.handle('select-directory', async (req, data) => {
+  try {
+    const result = await dialog.showOpenDialog({
+      properties: ['openDirectory'],
+      title: 'Select Minecraft Directory',
+    });
+
+    if (result.canceled){
+      if (data.currentDirectory !== null){
+        return data.currentDirectory;
+      }
+    }
+
+    const selectedPath = result.filePaths[0];
+
+    return selectedPath || '';
+  } catch (err) {
+    console.error('Error opening directory dialog:', err);
+    return '';
+  }
+});
+
+
+
 ipcMain.handle('gist-handler', async (req, data) => {
   if (!data || !data.request) return;
   switch (data.request){
