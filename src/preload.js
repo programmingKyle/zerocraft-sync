@@ -6,7 +6,6 @@ contextBridge.exposeInMainWorld('api', {
     gistHandler: (data) => ipcRenderer.invoke('gist-handler', data),
     serverHandler: (data) => ipcRenderer.invoke('server-handler', data),
     selectDirectory: () => ipcRenderer.invoke('select-directory'),
-
     onServerStatusUpdate: (callback) => {
         ipcRenderer.on('server-status', (_, status) => {
             callback(status);

@@ -7,6 +7,7 @@ const accessTokenInput_el = document.getElementById('accessTokenInput');
 const saveSettingsButton_el = document.getElementById('saveSettingsButton');
 const backSettingsButton_el = document.getElementById('backSettingsButton');
 const ipInput_el = document.getElementById('ipInput');
+const repoLinkInput_el = document.getElementById('repoLinkInput');
 
 const selectedDirectoryText_el = document.getElementById('selectedDirectoryText');
 const selectDirectoryButton_el = document.getElementById('selectDirectoryButton');
@@ -18,6 +19,7 @@ let serverDirectory;
 saveSettingsButton_el.addEventListener('click', async () => {
     const values = {
         serverName: serverTitleInput_el.value,
+        repo: repoLinkInput_el.value,
         gistID: gistIDInput_el.value,
         accessToken: accessTokenInput_el.value,
         ip: ipInput_el.value,

@@ -58,6 +58,7 @@ stopServerButton_el.addEventListener('click', async () => {
             if (consoleText_el.style.display = 'grid'){
                 consoleText_el.style.display = 'none';
             }
+
         }
     }
 });

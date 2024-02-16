@@ -3,12 +3,15 @@ const path = require('path');
 const fs = require('fs');
 const axios = require('axios');
 const { spawn } = require('child_process');
+const simpleGit = require('simple-git');
 
 let mainWindow;
 let isMaximized;
 
 let serverProcess;
-let serverDir; 
+let directory; 
+
+let settings;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -19,7 +22,7 @@ const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 400,
-    height: 350,
+    height: 375,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -63,6 +66,7 @@ ipcMain.handle('server-handler', (req, data) => {
   switch (data.request){
     case 'Start':
       startServer(data.directory);
+      directory = data.directory;
       break;
     case 'Stop':
       stopServer(data.directory);
@@ -74,16 +78,40 @@ ipcMain.on('server-status', (event, status) => {
   mainWindow.webContents.send('server-status', status);
 });
 
+async function updateWorldRepo() {
+  const worldDir = path.join(directory, 'worlds');
+  const repoUrl = settings.repo;
+  const username = repoUrl.split('/')[3];
+  const accessToken = settings.accessToken;
+
+  const git = simpleGit(worldDir);
+ 
+  try {
+    await git.add('.');
+      await git.commit('Update worlds folder');
+      const remoteUrlWithToken = repoUrl.replace('https://', `https://${username}:${accessToken}@`);
+      const remoteMain = await git.getRemotes(true).then(remotes => remotes.find(remote => remote.name === 'main'));
+    if (remoteMain) {
+      await git.removeRemote('main');
+    }
+    await git.addRemote('main', remoteUrlWithToken);
+    await git.push(['-u', 'main', 'main', '--force']);
+    console.log('Success');
+  } catch (error) {
+    console.error('Error committing and pushing changes:', error.message);
+  }
+}
+
 function stopServer(){
   if (serverProcess.stdin) {
-    serverProcess.stdin.write('stop\n'); // Assuming the server process accepts "stop" for graceful shutdown
+    serverProcess.stdin.write('stop\n');
   } else {
     console.error('Error: stdin is null');
   }
 }
 
 function startServer(directory) {
-  serverDir = path.join(directory, 'bedrock_server.exe');
+  const serverDir = path.join(directory, 'bedrock_server.exe');
   serverProcess = spawn(serverDir, {
     stdio: ['pipe', 'pipe', 'pipe'], // Enable stdin, stdout, and stderr
   });
@@ -103,7 +131,6 @@ function startServer(directory) {
 
   serverProcess.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
-    // Process stderr data here
   });
 
   serverProcess.on('error', (err) => {
@@ -112,12 +139,7 @@ function startServer(directory) {
 
   serverProcess.on('close', (code) => {
     console.log(`Server process exited with code ${code}`);
-    // Perform actions when the process is closed
-  });
-
-  serverProcess.on('exit', (code) => {
-    console.log(`Server process exited with code ${code}`);
-    // Perform actions when the process exits
+    updateWorldRepo();
   });
 }
 
@@ -214,7 +236,7 @@ ipcMain.handle('host-settings-handler', (req, data) => {
 function getSettings(){
   if (fs.existsSync('settings.json')){
     const settingsContent = fs.readFileSync('settings.json', 'utf-8');
-    const settings = JSON.parse(settingsContent);
+    settings = JSON.parse(settingsContent);
     return settings;
   } else {
     return null;
