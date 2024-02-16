@@ -60,11 +60,12 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-ipcMain.handle('server-handler', (req, data) => {
+ipcMain.handle('server-handler', async (req, data) => {
   console.log(data);
   if (!data || !data.request) return;
   switch (data.request){
     case 'Start':
+      await getWorldRepo(data.directory);
       startServer(data.directory);
       directory = data.directory;
       break;
@@ -77,6 +78,29 @@ ipcMain.handle('server-handler', (req, data) => {
 ipcMain.on('server-status', (event, status) => {
   mainWindow.webContents.send('server-status', status);
 });
+
+async function getWorldRepo(directory) {
+  const worldDir = path.join(directory, 'worlds');
+  const repoUrl = settings.repo;
+  const username = repoUrl.split('/')[3];
+  const accessToken = settings.accessToken;
+
+  const git = simpleGit(worldDir);
+
+  try {
+    const isRepo = await git.checkIsRepo();
+    if (isRepo) {
+      await git.pull();
+      console.log('Pulled latest changes');
+    } else {
+      const cloneUrlWithToken = repoUrl.replace('https://', `https://${username}:${accessToken}@`);
+      await git.clone(cloneUrlWithToken, worldDir);
+      console.log('Cloned world repository');
+    }
+  } catch (error) {
+    console.error('Error in getWorldRepo:', error);
+  }
+}
 
 async function updateWorldRepo() {
   const worldDir = path.join(directory, 'worlds');
