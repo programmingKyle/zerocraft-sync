@@ -26,6 +26,11 @@ saveSettingsButton_el.addEventListener('click', async () => {
 
     await api.hostSettingsHandler({request: 'Add', settings: values});
     settingsOverlay_el.style.display = 'none';
+
+    settings = await api.hostSettingsHandler({request: 'Get'});
+    if (settings !== null){
+        await getGist();
+    }
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
