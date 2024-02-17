@@ -107,7 +107,6 @@ ipcMain.handle('server-handler', async (req, data) => {
   if (!data || !data.request) return;
   switch (data.request){
     case 'Start':
-      console.log(allowClose);
       await getWorldRepo(data.directory);
       startServer(data.directory);
       directory = data.directory;
@@ -143,7 +142,6 @@ async function getWorldRepo(directory) {
       await git.raw(['symbolic-ref', 'HEAD', 'refs/heads/main']);
       await git.raw(['branch', '-m', 'main']);
       await git.reset(['--hard', 'origin/main']);
-      console.log('Fetched and reset to remote history');
     }
   } catch (error) {
     console.error('Error in getWorldRepo:', error);
@@ -173,7 +171,6 @@ async function updateWorldRepo() {
     }
     await git.addRemote('main', remoteUrlWithToken);
     await git.push(['-u', 'main', 'main', '--force']);
-    console.log('Success');
     mainWindow.webContents.send('server-status', 'Upload Success');
     allowClose = true;
   } catch (error) {
@@ -218,7 +215,6 @@ function startServer(directory) {
   });
 
   serverProcess.on('close', (code) => {
-    console.log(`Server process exited with code ${code}`);
     updateWorldRepo();
   });
 }
@@ -257,7 +253,6 @@ ipcMain.handle('gist-handler', async (req, data) => {
       return viewInfo;
     case 'Update':
       mainWindow.webContents.send('server-status', 'Updating');
-      console.log(data);
       const updateSuccess = await updateGist(data.gistID, data.accessToken, data.updatedContent);
       return updateSuccess;
   }
