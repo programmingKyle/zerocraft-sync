@@ -34,11 +34,10 @@ async function updateGist(){
         "status": gist.status === 'OFFLINE' ? 'ONLINE' : 'OFFLINE',
         "servername": gist.status === 'OFFLINE' ? settings.serverName : null,
         "ip": gist.status === 'OFFLINE' ? settings.ip : null,
-        "port": gist.status === 'OFFLINE' ? '3306' : null
+        "port": gist.status === 'OFFLINE' ? '19132' : null
     }
     const updateSuccess = await api.gistHandler({request: 'Update', gistID: settings.gistID, accessToken: settings.accessToken, updatedContent});
     if (updateSuccess){
-        toggleServerStatus();
         await getGist();
     }
 }

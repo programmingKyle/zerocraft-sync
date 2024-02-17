@@ -4,7 +4,7 @@ const content_el = document.getElementById('content');
 const consoleText_el = document.getElementById('consoleText');
 
 let serverOnline = false;
-let isHost = true;
+let isHost = false;
 
 function isServerOnline(){
     if (gist.status === 'ONLINE'){
@@ -23,46 +23,51 @@ function toggleServerStatus(){
     if (!serverOnline){
         isHost = true;
         serverOnline = true;
-        startServerButton_el.style.display = 'none';
-        stopServerButton_el.style.display = 'block';
-        
     } else {
         if (isHost){
             isHost = false;
         }
         serverOnline = false;
-        startServerButton_el.style.display = 'block';
-        stopServerButton_el.style.display = 'none';
     }
 }
 
 startServerButton_el.addEventListener('click', async () => {
     if (!serverOnline){
+        toggleServerStatus();
+        if (isHost){
+            consoleText_el.style.display = 'grid';
+        }
+        startServerButton_el.style.display = 'none';
         await getGist();
         if (gist.status === 'OFFLINE'){
             await updateGist();
             await api.serverHandler({request: 'Start', directory: settings.directory});
-            if (isHost){
-                consoleText_el.style.display = 'grid';
-            }
+        } else {
+            startServerButton_el.style.display = 'grid';
         }
     }
 });
 
 stopServerButton_el.addEventListener('click', async () => {
     if (serverOnline && isHost){
+        stopServerButton_el.style.display = 'none';
         await getGist();
         if (gist.status === 'ONLINE'){
             await updateGist();
             await api.serverHandler({request: 'Stop'});
-            if (consoleText_el.style.display = 'grid'){
-                consoleText_el.style.display = 'none';
-            }
-
         }
     }
 });
 
 api.onServerStatusUpdate((status) => {
     consoleText_el.textContent = status;
+    if (status === 'Online'){
+        stopServerButton_el.style.display = 'block';
+    }
+    if (status === 'Upload Success'){
+        setTimeout(() => {
+            consoleText_el.style.display = 'none';
+            startServerButton_el.style.display = 'block';
+        }, 1000);
+    }
 })

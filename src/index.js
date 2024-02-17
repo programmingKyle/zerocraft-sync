@@ -114,6 +114,7 @@ ipcMain.on('server-status', (event, status) => {
 });
 
 async function getWorldRepo(directory) {
+  mainWindow.webContents.send('server-status', 'Gathering World Data');
   const worldDir = path.join(directory, 'worlds');
   const repoUrl = settings.repo;
   const username = repoUrl.split('/')[3];
@@ -143,7 +144,9 @@ async function getWorldRepo(directory) {
 
 
 async function updateWorldRepo() {
+  mainWindow.webContents.send('server-status', 'Creating Local Backup');
   createWorldBackup();
+  mainWindow.webContents.send('server-status', 'Uploading World Data');
   const worldDir = path.join(directory, 'worlds');
   const repoUrl = settings.repo;
   const username = repoUrl.split('/')[3];
@@ -162,6 +165,7 @@ async function updateWorldRepo() {
     await git.addRemote('main', remoteUrlWithToken);
     await git.push(['-u', 'main', 'main', '--force']);
     console.log('Success');
+    mainWindow.webContents.send('server-status', 'Upload Success');
   } catch (error) {
     console.error('Error committing and pushing changes:', error.message);
   }
@@ -169,6 +173,7 @@ async function updateWorldRepo() {
 
 function stopServer(){
   if (serverProcess.stdin) {
+    mainWindow.webContents.send('server-status', 'Stopping Server');
     serverProcess.stdin.write('stop\n');
   } else {
     console.error('Error: stdin is null');
@@ -236,9 +241,11 @@ ipcMain.handle('gist-handler', async (req, data) => {
   if (!data || !data.request) return;
   switch (data.request){
     case 'View':
+      mainWindow.webContents.send('server-status', 'Viewing Gist');
       const viewInfo = viewGist(data.gistID, data.accessToken);
       return viewInfo;
     case 'Update':
+      mainWindow.webContents.send('server-status', 'Updating');
       console.log(data);
       const updateSuccess = await updateGist(data.gistID, data.accessToken, data.updatedContent);
       return updateSuccess;
