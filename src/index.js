@@ -89,18 +89,24 @@ async function getWorldRepo(directory) {
 
   try {
     const isRepo = await git.checkIsRepo();
-    if (isRepo) {
-      await git.pull();
-      console.log('Pulled latest changes');
-    } else {
-      const cloneUrlWithToken = repoUrl.replace('https://', `https://${username}:${accessToken}@`);
-      await git.clone(cloneUrlWithToken, worldDir);
-      console.log('Cloned world repository');
+    if (!isRepo) {
+      await git.init();
+      await git.addConfig('user.name', username);
+      await git.addConfig('user.email', `${username}@example.com`);
+      const remoteUrlWithToken = repoUrl.replace('https://', `https://${username}:${accessToken}@`);
+      await git.addRemote('origin', remoteUrlWithToken);
+      await git.fetch('origin', 'main', ['--tags']);
+      await git.raw(['symbolic-ref', 'HEAD', 'refs/heads/main']);
+      await git.raw(['branch', '-m', 'main']);
+      await git.reset(['--hard', 'origin/main']);
+      console.log('Fetched and reset to remote history');
     }
   } catch (error) {
     console.error('Error in getWorldRepo:', error);
   }
 }
+
+
 
 async function updateWorldRepo() {
   const worldDir = path.join(directory, 'worlds');
@@ -112,9 +118,9 @@ async function updateWorldRepo() {
  
   try {
     await git.add('.');
-      await git.commit('Update worlds folder');
-      const remoteUrlWithToken = repoUrl.replace('https://', `https://${username}:${accessToken}@`);
-      const remoteMain = await git.getRemotes(true).then(remotes => remotes.find(remote => remote.name === 'main'));
+    await git.commit('Update worlds folder');
+    const remoteUrlWithToken = repoUrl.replace('https://', `https://${username}:${accessToken}@`);
+    const remoteMain = await git.getRemotes(true).then(remotes => remotes.find(remote => remote.name === 'main'));
     if (remoteMain) {
       await git.removeRemote('main');
     }
