@@ -13,6 +13,8 @@ let directory;
 
 let settings;
 
+let allowClose = true;
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -34,6 +36,12 @@ const createWindow = () => {
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools();
+
+  mainWindow.on('close', (event) => {
+    if (!allowClose) {
+      event.preventDefault();  // Prevent the window from closing
+    }
+  });
 };
 
 // This method will be called when Electron has finished
@@ -99,6 +107,7 @@ ipcMain.handle('server-handler', async (req, data) => {
   if (!data || !data.request) return;
   switch (data.request){
     case 'Start':
+      console.log(allowClose);
       await getWorldRepo(data.directory);
       startServer(data.directory);
       directory = data.directory;
@@ -166,6 +175,7 @@ async function updateWorldRepo() {
     await git.push(['-u', 'main', 'main', '--force']);
     console.log('Success');
     mainWindow.webContents.send('server-status', 'Upload Success');
+    allowClose = true;
   } catch (error) {
     console.error('Error committing and pushing changes:', error.message);
   }
@@ -239,6 +249,7 @@ ipcMain.handle('select-directory', async (req, data) => {
 
 ipcMain.handle('gist-handler', async (req, data) => {
   if (!data || !data.request) return;
+  allowClose = false;
   switch (data.request){
     case 'View':
       mainWindow.webContents.send('server-status', 'Viewing Gist');
