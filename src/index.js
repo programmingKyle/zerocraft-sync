@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const axios = require('axios');
 const { spawn } = require('child_process');
 const simpleGit = require('simple-git');
@@ -39,7 +39,10 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createBackupFolder();
+  createWindow();
+});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -60,8 +63,39 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+function createBackupFolder(){
+  const backupDir = path.join(__dirname, 'backups');
+  if (!fs.existsSync(backupDir)){
+    fs.mkdirSync(backupDir);
+  }
+}
+
+async function createWorldBackup() {
+  const backupRootDir = path.join(__dirname, 'backups');
+  const worldDirectory = path.join(directory, 'worlds', 'Bedrock level');
+
+  try {
+    // Ensure the backup root directory exists
+    await fs.ensureDir(backupRootDir);
+
+    // Generate a timestamp for the backup directory
+    const dateTime = new Date().toLocaleString();
+    const date = dateTime.replace(/\//g, '-').split(', ')[0];
+    const time = dateTime.replace(/:/g, '-').split(', ')[1];
+    const backupDirName = `backup_${date}-${time}`;
+    const backupDir = path.join(backupRootDir, backupDirName);
+
+    // Ensure the specific backup directory exists
+    await fs.ensureDir(backupDir);
+
+    // Copy the entire contents of the world directory to the backup directory
+    await fs.copy(worldDirectory, backupDir);
+  } catch (error) {
+    console.error('Error creating backup:', error);
+  }
+}
+
 ipcMain.handle('server-handler', async (req, data) => {
-  console.log(data);
   if (!data || !data.request) return;
   switch (data.request){
     case 'Start':
@@ -109,6 +143,7 @@ async function getWorldRepo(directory) {
 
 
 async function updateWorldRepo() {
+  createWorldBackup();
   const worldDir = path.join(directory, 'worlds');
   const repoUrl = settings.repo;
   const username = repoUrl.split('/')[3];
