@@ -232,10 +232,8 @@ function startServer(directory) {
     if (data.includes('Quit')){
       mainWindow.webContents.send('server-status', 'Offline');
     } else if (terminalOpen) {
-      console.log(data);
       const textDecoder = new TextDecoder('utf-8');
       const decodedString = textDecoder.decode(data);
-      console.log(decodedString);
       terminalWindow.webContents.send('server-status', decodedString);
     }
     // Process stdout data here
