@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld('api', {
     },
 
     toggleTerminal: () => ipcRenderer.invoke('toggle-terminal'),
+    checkAndCloseTerminal: () => ipcRenderer.invoke('check-and-close-terminal'),
     sendTerminal: (data) => ipcRenderer.invoke('send-terminal', data),
 });

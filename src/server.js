@@ -7,7 +7,7 @@ const startControls_el = document.getElementById('startControls');
 const toggleTerminalButton_el = document.getElementById('toggleTerminalButton');
 
 let serverOnline = false;
-let isHost = false;
+let isHost = true;
 
 function isServerOnline(){
     if (gist.status === 'ONLINE'){
@@ -15,6 +15,8 @@ function isServerOnline(){
         startServerButton_el.style.display = 'none';
         if (!isHost){
             stopServerButton_el.style.display = 'none';
+        } else {
+            stopServerButton_el.style.display = 'block';
         }
     } else {
         serverOnline = false;
@@ -61,6 +63,7 @@ stopServerButton_el.addEventListener('click', async () => {
         toggleTerminalButton_el.style.display = 'none';
         startControls_el.style.display = 'none';
         stopServerButton_el.style.display = 'none';
+        api.checkAndCloseTerminal();
         await getGist();
         if (gist.status === 'ONLINE'){
             await updateGist();
