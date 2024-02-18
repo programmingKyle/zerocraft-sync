@@ -40,11 +40,19 @@ Recommended you create a new Github account for your server. You will be giving 
 - Login to Github
 - Create a repository with desired name
   - Here you can go ahead and upload your worlds/Bedrock level folder (there should only be the Bedrock level folder in the repo)
-- Create a Github Gist for the server_status.json
+- Create a Github Gist for the server_status.json and add contents
 <details>
-  <summary>server_status.json file</summary>
-  Test
+  <summary>server_status.json file contents</summary>
+  <pre>
+{
+  "status": "OFFLINE",
+  "servername": null,
+  "ip": null,
+  "port": null
+}
+  </pre>
 </details>
+
 
 ### How to Setup Access Token
 - Login to Github
