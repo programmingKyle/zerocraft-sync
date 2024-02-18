@@ -107,6 +107,7 @@ ipcMain.handle('server-handler', async (req, data) => {
   if (!data || !data.request) return;
   switch (data.request){
     case 'Start':
+      allowClose = false;
       await getWorldRepo(data.directory);
       startServer(data.directory);
       directory = data.directory;
@@ -227,9 +228,7 @@ ipcMain.handle('select-directory', async (req, data) => {
     });
 
     if (result.canceled){
-      if (data.currentDirectory !== null){
-        return data.currentDirectory;
-      }
+      return null;
     }
 
     const selectedPath = result.filePaths[0];
@@ -241,11 +240,8 @@ ipcMain.handle('select-directory', async (req, data) => {
   }
 });
 
-
-
 ipcMain.handle('gist-handler', async (req, data) => {
   if (!data || !data.request) return;
-  allowClose = false;
   switch (data.request){
     case 'View':
       mainWindow.webContents.send('server-status', 'Viewing Gist');

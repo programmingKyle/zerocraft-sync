@@ -14,9 +14,37 @@ const selectDirectoryButton_el = document.getElementById('selectDirectoryButton'
 
 let settings;
 
-let serverDirectory;
+let serverDirectory = null;
+
+const requiredInputs = [
+    serverTitleInput_el, repoLinkInput_el, gistIDInput_el, accessTokenInput_el,
+    ipInput_el
+];
+
+function requiredInputCheck(){
+    let isValid;
+    if (!serverDirectory){
+        selectedDirectoryText_el.classList.add('error');
+        isValid = false;
+    }
+    requiredInputs.forEach(element => {
+        if (element.value === ''){
+            element.classList.add('error');
+            isValid = false;
+            element.addEventListener('click', () => {
+                element.classList.remove('error');
+            });
+        } else {
+            isValid = true;
+        }
+    });
+    return isValid;
+}
 
 saveSettingsButton_el.addEventListener('click', async () => {
+    if (!requiredInputCheck()){
+        return;
+    }
     const values = {
         serverName: serverTitleInput_el.value,
         repo: repoLinkInput_el.value,
@@ -46,7 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 selectDirectoryButton_el.addEventListener('click', async () => {
     serverDirectory = await api.selectDirectory();
-    if (serverDirectory !== ''){
+    if (serverDirectory){
         selectedDirectoryText_el.textContent = serverDirectory;
     }
 });

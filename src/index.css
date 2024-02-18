@@ -63,6 +63,10 @@ input.error {
   box-shadow: inset 0px 0px 5px #ff2b2b;
 }
 
+.selected-directory.error {
+  box-shadow: inset 0px 0px 5px #ff2b2b;
+}
+
 .buttons-grid {
   display: grid;
   grid-gap: 5px;
