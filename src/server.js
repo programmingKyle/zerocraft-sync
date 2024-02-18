@@ -7,7 +7,7 @@ const startControls_el = document.getElementById('startControls');
 const toggleTerminalButton_el = document.getElementById('toggleTerminalButton');
 
 let serverOnline = false;
-let isHost = false;
+let isHost = true;
 
 function isServerOnline(){
     if (gist.status === 'ONLINE'){

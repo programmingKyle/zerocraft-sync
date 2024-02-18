@@ -215,12 +215,25 @@ async function updateWorldRepo() {
   }
 }
 
-function stopServer(){
-  if (serverProcess.stdin) {
+async function stopServer() {
+  if (serverProcess && serverProcess.stdin) {
     mainWindow.webContents.send('server-status', 'Stopping Server');
+    // serverProcess.stdin.write('stop\n');
+    serverProcess.stdin.write('tellraw @a {"rawtext":[{"text":"Server is shutting down in 10 seconds"}]}\n');
+    await countdown(10);
     serverProcess.stdin.write('stop\n');
   } else {
     console.error('Error: stdin is null');
+  }
+}
+
+async function countdown(number) {
+  while (number >= 0) {
+    if (serverProcess && serverProcess.stdin) {
+      serverProcess.stdin.write(`tellraw @a {"rawtext":[{"text":"${number}"}]}\n`);
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    number--;
   }
 }
 
