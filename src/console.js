@@ -22,6 +22,6 @@ document.addEventListener('keydown', async (e) => {
     let keyPress = e.key;
     if (keyPress === 'Enter' && consoleTextInput_el.value !== 'stop' || ''){
         await api.sendTerminal({message: consoleTextInput_el.value});
+        consoleTextInput_el.value = '';
     }
-    consoleTextInput_el.value = '';
 })

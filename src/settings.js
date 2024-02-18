@@ -9,6 +9,7 @@ const backSettingsButton_el = document.getElementById('backSettingsButton');
 const ipInput_el = document.getElementById('ipInput');
 const repoLinkInput_el = document.getElementById('repoLinkInput');
 const toggleOptionsButton_el = document.getElementById('toggleOptionsButton');
+const pasteAllSettings_el = document.getElementById('pasteAllSettings');
 
 const selectedDirectoryText_el = document.getElementById('selectedDirectoryText');
 const selectDirectoryButton_el = document.getElementById('selectDirectoryButton');
@@ -22,25 +23,27 @@ const requiredInputs = [
     ipInput_el
 ];
 
-function requiredInputCheck(){
-    let isValid;
-    if (!serverDirectory){
+function requiredInputCheck() {
+    let isValid = true; // Assume validity by default
+
+    if (!serverDirectory) {
         selectedDirectoryText_el.classList.add('error');
         isValid = false;
     }
+
     requiredInputs.forEach(element => {
-        if (element.value === ''){
+        if (element.value.trim() === '') {
             element.classList.add('error');
             isValid = false;
-            element.addEventListener('click', () => {
+            element.addEventListener('input', () => {
                 element.classList.remove('error');
             });
-        } else {
-            isValid = true;
         }
     });
+
     return isValid;
 }
+
 
 saveSettingsButton_el.addEventListener('click', async () => {
     if (!requiredInputCheck()){
@@ -100,4 +103,12 @@ backSettingsButton_el.addEventListener('click', () => {
     accessTokenInput_el.value = settings.accessToken;
     ipInput_el.value = settings.ip;
     selectedDirectoryText_el.value = settings.directory;
+});
+
+pasteAllSettings_el.addEventListener('click', async () => {
+    const clipboardValues = JSON.parse(await api.pasteSettingsClipboard());
+    console.log(serverTitleInput_el.value);
+    repoLinkInput_el.value = clipboardValues.repo;
+    gistIDInput_el.value = clipboardValues.gistID;
+    accessTokenInput_el.value = clipboardValues.accessToken;
 });

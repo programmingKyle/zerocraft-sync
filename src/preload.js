@@ -11,7 +11,7 @@ contextBridge.exposeInMainWorld('api', {
             callback(status);
         });
     },
-
+    pasteSettingsClipboard: () => ipcRenderer.invoke('paste-settings-clipboard'),
     toggleTerminal: () => ipcRenderer.invoke('toggle-terminal'),
     checkAndCloseTerminal: () => ipcRenderer.invoke('check-and-close-terminal'),
     sendTerminal: (data) => ipcRenderer.invoke('send-terminal', data),

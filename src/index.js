@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, globalShortcut } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard  } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const axios = require('axios');
@@ -78,6 +78,11 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.handle('paste-settings-clipboard', () => {
+  const clipboardData = clipboard.readText();
+  return clipboardData;
+});
+
 ipcMain.handle('check-and-close-terminal', () => {
   if (terminalOpen){
     terminalWindow.close();
