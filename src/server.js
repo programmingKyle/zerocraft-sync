@@ -6,6 +6,11 @@ const hostConsolePreview_el = document.getElementById('hostConsolePreview');
 const startControls_el = document.getElementById('startControls');
 const toggleTerminalButton_el = document.getElementById('toggleTerminalButton');
 
+const stopOverlay_el = document.getElementById('stopOverlay');
+const stopOverlayContent_el = document.getElementById('stopOverlayContent');
+const confirmStopButton_el = document.getElementById('confirmStopButton');
+const cancelStopButton_el = document.getElementById('cancelStopButton');
+
 let serverOnline = false;
 let isHost = true;
 
@@ -58,8 +63,13 @@ startServerButton_el.addEventListener('click', async () => {
     }
 });
 
-stopServerButton_el.addEventListener('click', async () => {
+stopServerButton_el.addEventListener('click', () => {
+    stopOverlay_el.style.display = 'flex';
+});
+
+confirmStopButton_el.addEventListener('click', async () => {
     if (serverOnline && isHost){
+        stopOverlay_el.style.display = 'none';
         toggleTerminalButton_el.style.display = 'none';
         startControls_el.style.display = 'none';
         stopServerButton_el.style.display = 'none';
@@ -70,6 +80,10 @@ stopServerButton_el.addEventListener('click', async () => {
             await api.serverHandler({request: 'Stop'});
         }
     }
+});
+
+cancelStopButton_el.addEventListener('click', () => {
+    stopOverlay_el.style.display = 'none';
 });
 
 api.onServerStatusUpdate((status) => {
