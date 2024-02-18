@@ -85,7 +85,7 @@ api.onServerStatusUpdate((status) => {
             toggleOptionsButton_el.style.display = 'block';
         }, 1000);
     }
-})
+});
 
 toggleTerminalButton_el.addEventListener('click', () => {
     api.toggleTerminal();
