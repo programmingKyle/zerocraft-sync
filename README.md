@@ -15,19 +15,21 @@ Zerocraft Sync is committed to providing users with a smooth and effortless expe
 ### Prerequisites
 - node.js
 
-## For Server Setup (Only need to do this once per server)
-- Github Account
-- Github Repository (for world data, can be whatever name you want)
-- Github Gist (this will store the server_status.json)
-- Github Access Token (That can edit Gist and Repository)
-
 ### Dependencies
 - archiver
 - axios
 - simple-git
 
+## Requirements for Server Setup
+** Only need to do this once per server**
+- Github Account
+- Github Repository (for world data, can be whatever name you want)
+- Github Gist (this will store the server_status.json)
+- Github Access Token (That can edit Gist and Repository)
+- Minecraft Bedrock Dedicated Server (download this from the Minecraft website)
+
 ### Installation
-Clone this repository: https://github.com/programmingKyle/auto-clicker
+Clone this repository: https://github.com/programmingKyle/zerocraft-sync
 cd zerocraft-sync
 npm install
 
@@ -39,6 +41,10 @@ Recommended you create a new Github account for your server. You will be giving 
 - Create a repository with desired name
   - Here you can go ahead and upload your worlds/Bedrock level folder (there should only be the Bedrock level folder in the repo)
 - Create a Github Gist for the server_status.json
+<details>
+  <summary>server_status.json file</summary>
+  Test
+</details>
 
 ### How to Setup Access Token
 - Login to Github
@@ -59,12 +65,14 @@ From there user will be prompted to input server settings. Fill out all inputs a
 ### How To Use Console 
 When you are the host and the server is online there will be a console toggle button to the right of the server messages. There it will open a new window where you can use the console just like bedrock_server.exe. The only command that isn't accepted is 'stop' for obvious reasons.
 
-
 ### Thank you
+If everything is filled out correctly and setup you should see changes happening to the gist and repo as you start and stop the server.
 Thank you for checking out Zerocraft Sync. Any contributions are welcome.
+If you have issues feel free to send a message!
 
 
-  
+![Screenshot 2024-02-18 173326](https://github.com/programmingKyle/zerocraft-sync/assets/155344874/c11cb37c-3f42-41b1-bc96-5e2c1719af7c)
+
 
 
 
