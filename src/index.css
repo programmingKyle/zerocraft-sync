@@ -232,7 +232,6 @@ h3.online {
   margin: 0px;
 }
 
-
 .console-grid {
   display: grid;
   grid-template-rows: 1fr auto;

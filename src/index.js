@@ -84,6 +84,10 @@ function openTerminalWindow(){
     },
   });
   terminalWindow.loadFile(path.join(__dirname, 'consoleWindow.html'));
+
+  terminalWindow.on('close', (event) => {
+    terminalOpen = false;
+  });
 }
 
 ipcMain.handle('toggle-terminal', () => {
