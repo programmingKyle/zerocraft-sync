@@ -70,6 +70,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         settingsOverlay_el.style.display = 'flex';
     } else {
         await getGist();
+
+        serverTitleInput_el.value = settings.serverName;
+        repoLinkInput_el.value = settings.repo;
+        gistIDInput_el.value = settings.gistID;
+        accessTokenInput_el.value = settings.accessToken;
+        ipInput_el.value = settings.ip;
+        selectedDirectoryText_el.value = settings.directory;    
     }
 });
 
@@ -82,4 +89,15 @@ selectDirectoryButton_el.addEventListener('click', async () => {
 
 toggleOptionsButton_el.addEventListener('click', () => {
     settingsOverlay_el.style.display = 'flex';
+    backSettingsButton_el.style.display = 'block';
+});
+
+backSettingsButton_el.addEventListener('click', () => {
+    settingsOverlay_el.style.display = 'none';
+    serverTitleInput_el.value = settings.serverName;
+    repoLinkInput_el.value = settings.repo;
+    gistIDInput_el.value = settings.gistID;
+    accessTokenInput_el.value = settings.accessToken;
+    ipInput_el.value = settings.ip;
+    selectedDirectoryText_el.value = settings.directory;
 });
