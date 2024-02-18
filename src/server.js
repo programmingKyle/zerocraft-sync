@@ -88,5 +88,5 @@ api.onServerStatusUpdate((status) => {
 })
 
 toggleTerminalButton_el.addEventListener('click', () => {
-    api.openTerminal();
+    api.toggleTerminal();
 });

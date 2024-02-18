@@ -12,5 +12,5 @@ contextBridge.exposeInMainWorld('api', {
         });
     },
 
-    openTerminal: () => ipcRenderer.invoke('open-terminal'),
+    toggleTerminal: () => ipcRenderer.invoke('toggle-terminal'),
 });

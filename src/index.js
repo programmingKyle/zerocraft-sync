@@ -73,6 +73,7 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 let terminalWindow;
+let terminalOpen;
 
 function openTerminalWindow(){
   terminalWindow = new BrowserWindow({
@@ -84,12 +85,17 @@ function openTerminalWindow(){
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-
   terminalWindow.loadFile(path.join(__dirname, 'consoleWindow.html'));
 }
 
-ipcMain.handle('open-terminal', () => {
-  openTerminalWindow();
+ipcMain.handle('toggle-terminal', () => {
+  if (!terminalOpen){
+    terminalOpen = true;
+    openTerminalWindow();
+  } else {
+    terminalOpen = false;
+    terminalWindow.close();
+  }
 });
 
 
