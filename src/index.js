@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, globalShortcut } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const axios = require('axios');
@@ -49,6 +49,12 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  const ret = globalShortcut.register('CommandOrControl+R', () => {
+    return;
+  });
+  if (!ret){
+    console.log('Shortcut not found');
+  }
   createBackupFolder();
   createWindow();
 });
