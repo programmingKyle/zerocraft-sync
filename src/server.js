@@ -4,6 +4,7 @@ const content_el = document.getElementById('content');
 const consoleText_el = document.getElementById('consoleText');
 const hostConsolePreview_el = document.getElementById('hostConsolePreview');
 const startControls_el = document.getElementById('startControls');
+const toggleTerminalButton_el = document.getElementById('toggleTerminalButton');
 
 let serverOnline = false;
 let isHost = false;
@@ -57,6 +58,7 @@ startServerButton_el.addEventListener('click', async () => {
 
 stopServerButton_el.addEventListener('click', async () => {
     if (serverOnline && isHost){
+        toggleTerminalButton_el.style.display = 'none';
         startControls_el.style.display = 'none';
         stopServerButton_el.style.display = 'none';
         await getGist();
@@ -70,6 +72,7 @@ stopServerButton_el.addEventListener('click', async () => {
 api.onServerStatusUpdate((status) => {
     consoleText_el.textContent = status;
     if (status === 'Online'){
+        toggleTerminalButton_el.style.display = 'block';
         startControls_el.style.display = 'grid';
         stopServerButton_el.style.display = 'block';
     }
