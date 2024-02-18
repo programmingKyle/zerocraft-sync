@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const axios = require('axios');
 const { spawn } = require('child_process');
 const simpleGit = require('simple-git');
+const archiver = require('archiver');
 
 let mainWindow;
 let isMaximized;
@@ -90,14 +91,18 @@ async function createWorldBackup() {
     const dateTime = new Date().toLocaleString();
     const date = dateTime.replace(/\//g, '-').split(', ')[0];
     const time = dateTime.replace(/:/g, '-').split(', ')[1];
-    const backupDirName = `backup_${date}-${time}`;
+    const backupDirName = `backup_${date}-${time}.zip`;
     const backupDir = path.join(backupRootDir, backupDirName);
 
-    // Ensure the specific backup directory exists
-    await fs.ensureDir(backupDir);
-
-    // Copy the entire contents of the world directory to the backup directory
-    await fs.copy(worldDirectory, backupDir);
+    const output = fs.createWriteStream(backupDir);
+    const archive = archiver('zip', {
+      zlib: { level: 9 }
+    });
+    archive.pipe(output);
+    archive.directory(worldDirectory, false);
+    await archive.finalize();
+    output.end();
+    console.log('Backup successfully created:', backupDir);
   } catch (error) {
     console.error('Error creating backup:', error);
   }
