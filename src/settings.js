@@ -8,6 +8,7 @@ const saveSettingsButton_el = document.getElementById('saveSettingsButton');
 const backSettingsButton_el = document.getElementById('backSettingsButton');
 const ipInput_el = document.getElementById('ipInput');
 const repoLinkInput_el = document.getElementById('repoLinkInput');
+const toggleOptionsButton_el = document.getElementById('toggleOptionsButton');
 
 const selectedDirectoryText_el = document.getElementById('selectedDirectoryText');
 const selectDirectoryButton_el = document.getElementById('selectDirectoryButton');
@@ -77,4 +78,8 @@ selectDirectoryButton_el.addEventListener('click', async () => {
     if (serverDirectory){
         selectedDirectoryText_el.textContent = serverDirectory;
     }
+});
+
+toggleOptionsButton_el.addEventListener('click', () => {
+    settingsOverlay_el.style.display = 'flex';
 });

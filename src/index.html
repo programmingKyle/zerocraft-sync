@@ -57,11 +57,11 @@
             <h3 id="serverPortText"></h3>
           </div>            
         </div>
-        <div style="display: grid; grid-template-columns: auto 1fr; grid-gap: 5px;">
-          <button class="fas fa-gear" style="padding: 0px 15px;"></button>
+        <div id="startControls" style="display: grid; grid-template-columns: auto 1fr; grid-gap: 5px;">
+          <button id="toggleOptionsButton" class="fas fa-gear" style="padding: 0px 15px;"></button>
           <button id="startServerButton">Start Server</button>
+          <button id="stopServerButton">Stop Server</button>
         </div>
-        <button id="stopServerButton">Stop Server</button>
         <div id="hostConsolePreview" style="display: none; grid-template-columns: 1fr auto; background-color: black; place-content: center;">
           <span id="consoleText" class="server-status">Initializing</span>
           <button id="toggleTerminalButton" class="slim-button fas fa-terminal"></button>

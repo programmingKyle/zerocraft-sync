@@ -3,6 +3,7 @@ const stopServerButton_el = document.getElementById('stopServerButton');
 const content_el = document.getElementById('content');
 const consoleText_el = document.getElementById('consoleText');
 const hostConsolePreview_el = document.getElementById('hostConsolePreview');
+const startControls_el = document.getElementById('startControls');
 
 let serverOnline = false;
 let isHost = false;
@@ -38,19 +39,25 @@ startServerButton_el.addEventListener('click', async () => {
         if (isHost){
             hostConsolePreview_el.style.display = 'grid';
         }
+        startControls_el.style.gridTemplateColumns = '1fr';
+        startControls_el.style.display = 'none';
         startServerButton_el.style.display = 'none';
+        toggleOptionsButton_el.style.display = 'none';
         await getGist();
         if (gist.status === 'OFFLINE'){
             await updateGist();
             await api.serverHandler({request: 'Start', directory: settings.directory});
         } else {
             startServerButton_el.style.display = 'grid';
+            toggleOptionsButton_el.style.display = 'grid';
+            startControls_el.style.display = 'grid';
         }
     }
 });
 
 stopServerButton_el.addEventListener('click', async () => {
     if (serverOnline && isHost){
+        startControls_el.style.display = 'none';
         stopServerButton_el.style.display = 'none';
         await getGist();
         if (gist.status === 'ONLINE'){
@@ -63,12 +70,16 @@ stopServerButton_el.addEventListener('click', async () => {
 api.onServerStatusUpdate((status) => {
     consoleText_el.textContent = status;
     if (status === 'Online'){
+        startControls_el.style.display = 'grid';
         stopServerButton_el.style.display = 'block';
     }
     if (status === 'Upload Success'){
         setTimeout(() => {
+            startControls_el.style.display = 'grid';
+            startControls_el.style.gridTemplateColumns = 'auto 1fr';
             hostConsolePreview_el.style.display = 'none';
             startServerButton_el.style.display = 'block';
+            toggleOptionsButton_el.style.display = 'block';
         }, 1000);
     }
 })
