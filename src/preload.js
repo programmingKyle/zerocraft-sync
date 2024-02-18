@@ -13,5 +13,5 @@ contextBridge.exposeInMainWorld('api', {
     },
 
     toggleTerminal: () => ipcRenderer.invoke('toggle-terminal'),
-
-    test: (data) => ipcRenderer.invoke('test', data),});
+    sendTerminal: (data) => ipcRenderer.invoke('send-terminal', data),
+});
