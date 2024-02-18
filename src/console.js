@@ -3,7 +3,11 @@ const consoleTextInput_el = document.getElementById('consoleTextInput');
 const consoleSendButton_el = document.getElementById('consoleSendButton');
 
 consoleSendButton_el.addEventListener('click', async () => {
-    await api.sendTerminal({message: consoleTextInput_el.value});
+    if (consoleTextInput_el.value.toLowerCase() === 'stop') {
+        return;
+    } else {
+        await api.sendTerminal({message: consoleTextInput_el.value});
+    }
     consoleTextInput_el.value = '';
 });
 
@@ -12,4 +16,12 @@ api.onServerStatusUpdate((status) => {
     messageText_el.classList.add('console-message')
     messageText_el.textContent = status;
     consoleContent_el.append(messageText_el);
+})
+
+document.addEventListener('keydown', async (e) => {
+    let keyPress = e.key;
+    if (keyPress === 'Enter' && consoleTextInput_el.value !== 'stop' || ''){
+        await api.sendTerminal({message: consoleTextInput_el.value});
+    }
+    consoleTextInput_el.value = '';
 })
