@@ -2,6 +2,7 @@ const startServerButton_el = document.getElementById('startServerButton');
 const stopServerButton_el = document.getElementById('stopServerButton');
 const content_el = document.getElementById('content');
 const consoleText_el = document.getElementById('consoleText');
+const hostConsolePreview_el = document.getElementById('hostConsolePreview');
 
 let serverOnline = false;
 let isHost = false;
@@ -35,7 +36,7 @@ startServerButton_el.addEventListener('click', async () => {
     if (!serverOnline){
         toggleServerStatus();
         if (isHost){
-            consoleText_el.style.display = 'grid';
+            hostConsolePreview_el.style.display = 'grid';
         }
         startServerButton_el.style.display = 'none';
         await getGist();
@@ -66,7 +67,7 @@ api.onServerStatusUpdate((status) => {
     }
     if (status === 'Upload Success'){
         setTimeout(() => {
-            consoleText_el.style.display = 'none';
+            hostConsolePreview_el.style.display = 'none';
             startServerButton_el.style.display = 'block';
         }, 1000);
     }

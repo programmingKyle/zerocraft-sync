@@ -102,7 +102,6 @@ async function createWorldBackup() {
     archive.directory(worldDirectory, false);
     await archive.finalize();
     output.end();
-    console.log('Backup successfully created:', backupDir);
   } catch (error) {
     console.error('Error creating backup:', error);
   }
