@@ -72,6 +72,28 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+let terminalWindow;
+
+function openTerminalWindow(){
+  terminalWindow = new BrowserWindow({
+    width: 600,
+    height: 400,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+
+  terminalWindow.loadFile(path.join(__dirname, 'consoleWindow.html'));
+}
+
+ipcMain.handle('open-terminal', () => {
+  openTerminalWindow();
+});
+
+
+
 function createBackupFolder(){
   const backupDir = path.join(__dirname, 'backups');
   if (!fs.existsSync(backupDir)){

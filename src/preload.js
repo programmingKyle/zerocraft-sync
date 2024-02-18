@@ -11,4 +11,6 @@ contextBridge.exposeInMainWorld('api', {
             callback(status);
         });
     },
+
+    openTerminal: () => ipcRenderer.invoke('open-terminal'),
 });
