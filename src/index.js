@@ -238,6 +238,7 @@ async function countdown(number) {
   while (number >= 0) {
     if (serverProcess && serverProcess.stdin) {
       serverProcess.stdin.write(`tellraw @a {"rawtext":[{"text":"${number}"}]}\n`);
+      mainWindow.webContents.send('server-status', `Shutting down in ${number}...`);
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
     number--;
