@@ -42,25 +42,25 @@
         <div class="server-info">
           <div class="server-info-item">
             <h5>Status</h5>
-            <h3 id="serverStatusText"></h3>
+            <h3 id="serverStatusText">OFFLINE</h3>
           </div>
           <div class="server-info-item">
             <h5>Server Name</h5>
-            <h3 id="serverNameText"></h3>
+            <h3 id="serverNameText">N/A</h3>
           </div>
           <div class="server-info-item">
             <h5>IP</h5>
-            <h3 id="serverIPText"></h3>
+            <h3 id="serverIPText">N/A</h3>
           </div>            
           <div class="server-info-item">
             <h5>Port</h5>
-            <h3 id="serverPortText"></h3>
+            <h3 id="serverPortText">N/A</h3>
           </div>            
         </div>
         <div id="startControls" style="display: grid; grid-template-columns: auto 1fr; grid-gap: 5px;">
           <button id="toggleOptionsButton" class="fas fa-gear" style="padding: 0px 15px;"></button>
           <button id="startServerButton">Start Server</button>
-          <button id="stopServerButton">Stop Server</button>
+          <button id="stopServerButton" style="display: none">Stop Server</button>
         </div>
         <div id="hostConsolePreview" style="display: none; grid-template-columns: 1fr auto; background-color: black; place-content: center;">
           <span id="consoleText" class="server-status">Initializing</span>
