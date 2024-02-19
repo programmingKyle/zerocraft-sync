@@ -182,9 +182,7 @@ async function getWorldRepo(directory) {
   const repoUrl = settings.repo;
   const username = repoUrl.split('/')[3];
   const accessToken = settings.accessToken;
-
   const git = simpleGit(worldDir);
-
   try {
     const isRepo = await git.checkIsRepo();
     if (!isRepo) {
@@ -193,10 +191,11 @@ async function getWorldRepo(directory) {
       await git.addConfig('user.email', `${username}@example.com`);
       const remoteUrlWithToken = repoUrl.replace('https://', `https://${username}:${accessToken}@`);
       await git.addRemote('origin', remoteUrlWithToken);
-      await git.fetch('origin', 'main', ['--tags']);
       await git.raw(['symbolic-ref', 'HEAD', 'refs/heads/main']);
       await git.raw(['branch', '-m', 'main']);
+      await git.fetch('origin', 'main', ['--tags']);
       await git.reset(['--hard', 'origin/main']);
+      await git.push(['-u', 'origin', 'main']);
     }
   } catch (error) {
     console.error('Error in getWorldRepo:', error);

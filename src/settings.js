@@ -107,7 +107,6 @@ backSettingsButton_el.addEventListener('click', () => {
 
 pasteAllSettings_el.addEventListener('click', async () => {
     const clipboardValues = JSON.parse(await api.pasteSettingsClipboard());
-    console.log(serverTitleInput_el.value);
     repoLinkInput_el.value = clipboardValues.repo;
     gistIDInput_el.value = clipboardValues.gistID;
     accessTokenInput_el.value = clipboardValues.accessToken;
