@@ -12,7 +12,7 @@ const confirmStopButton_el = document.getElementById('confirmStopButton');
 const cancelStopButton_el = document.getElementById('cancelStopButton');
 
 let serverOnline = false;
-let isHost = true;
+let isHost = false;
 
 function isServerOnline(){
     if (gist.status === 'ONLINE'){
