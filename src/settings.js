@@ -60,6 +60,8 @@ saveSettingsButton_el.addEventListener('click', async () => {
     const canHost = canHostCheck();
     if (canHost){
         startServerButton_el.style.display = 'block';
+    } else {
+        startServerButton_el.style.display = 'none';
     }
 
     if (settings !== null){
