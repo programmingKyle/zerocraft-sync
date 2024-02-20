@@ -19,17 +19,11 @@ let settings;
 let serverDirectory = null;
 
 const requiredInputs = [
-    serverTitleInput_el, repoLinkInput_el, gistIDInput_el, accessTokenInput_el,
-    ipInput_el
+    gistIDInput_el, accessTokenInput_el, gistIDInput_el
 ];
 
 function requiredInputCheck() {
     let isValid = true; // Assume validity by default
-
-    if (!serverDirectory) {
-        selectedDirectoryText_el.classList.add('error');
-        isValid = false;
-    }
 
     requiredInputs.forEach(element => {
         if (element.value.trim() === '') {
@@ -62,6 +56,12 @@ saveSettingsButton_el.addEventListener('click', async () => {
     settingsOverlay_el.style.display = 'none';
 
     settings = await api.hostSettingsHandler({request: 'Get'});
+
+    const canHost = canHostCheck();
+    if (canHost){
+        startServerButton_el.style.display = 'block';
+    }
+
     if (settings !== null){
         await getGist();
     }
@@ -73,7 +73,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         settingsOverlay_el.style.display = 'flex';
     } else {
         await getGist();
-
+        const canHost = canHostCheck();
+        if (canHost){
+            startServerButton_el.style.display = 'block';
+        }
         serverTitleInput_el.value = settings.serverName;
         repoLinkInput_el.value = settings.repo;
         gistIDInput_el.value = settings.gistID;
@@ -82,6 +85,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         selectedDirectoryText_el.value = settings.directory;    
     }
 });
+
+function canHostCheck(){
+    let canHost = true;
+    const required = [settings.serverName, settings.repo, settings.gistID,
+        settings.accessToken, settings.ip, settings.directory];
+    required.forEach(element => {
+        console.log(element);
+        if (element === '' || element === null){
+            canHost = false;
+        }
+    });  
+    return canHost;
+}
 
 selectDirectoryButton_el.addEventListener('click', async () => {
     serverDirectory = await api.selectDirectory();
