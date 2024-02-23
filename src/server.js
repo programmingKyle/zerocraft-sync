@@ -76,8 +76,8 @@ confirmStopButton_el.addEventListener('click', async () => {
         api.checkAndCloseTerminal();
         await getGist();
         if (gist.status === 'ONLINE'){
-            await updateGist();
             await api.serverHandler({request: 'Stop'});
+            //await updateGist();
         }
     }
 });
@@ -86,7 +86,7 @@ cancelStopButton_el.addEventListener('click', () => {
     stopOverlay_el.style.display = 'none';
 });
 
-api.onServerStatusUpdate((status) => {
+api.onServerStatusUpdate(async (status) => {
     consoleText_el.textContent = status;
     if (status === 'Online'){
         toggleTerminalButton_el.style.display = 'block';
@@ -94,6 +94,7 @@ api.onServerStatusUpdate((status) => {
         stopServerButton_el.style.display = 'block';
     }
     if (status === 'Upload Success'){
+        await updateGist();
         setTimeout(() => {
             startControls_el.style.display = 'grid';
             startControls_el.style.gridTemplateColumns = 'auto 1fr';
