@@ -5,6 +5,7 @@ const consoleText_el = document.getElementById('consoleText');
 const hostConsolePreview_el = document.getElementById('hostConsolePreview');
 const startControls_el = document.getElementById('startControls');
 const toggleTerminalButton_el = document.getElementById('toggleTerminalButton');
+const refreshButton_el = document.getElementById('refreshButton');
 
 const stopOverlay_el = document.getElementById('stopOverlay');
 const stopOverlayContent_el = document.getElementById('stopOverlayContent');
@@ -13,6 +14,7 @@ const cancelStopButton_el = document.getElementById('cancelStopButton');
 
 let serverOnline = false;
 let isHost = false;
+let canRefresh = true;
 
 function isServerOnline(){
     if (gist.status === 'ONLINE'){
@@ -77,7 +79,6 @@ confirmStopButton_el.addEventListener('click', async () => {
         await getGist();
         if (gist.status === 'ONLINE'){
             await api.serverHandler({request: 'Stop'});
-            //await updateGist();
         }
     }
 });
@@ -108,3 +109,21 @@ api.onServerStatusUpdate(async (status) => {
 toggleTerminalButton_el.addEventListener('click', () => {
     api.toggleTerminal();
 });
+
+refreshButton_el.addEventListener('click', async () => {
+    if (canRefresh){
+        refreshButton_el.classList.add('disable');
+        canRefresh = false;
+        await getGist();
+        refreshTimeout();
+    }
+});
+
+function refreshTimeout(){
+    if (!canRefresh){
+        setTimeout(() => {
+            canRefresh = true;
+            refreshButton_el.classList.remove('disable');
+        }, 5000);    
+    }
+}

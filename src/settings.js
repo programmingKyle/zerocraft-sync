@@ -93,7 +93,6 @@ function canHostCheck(){
     const required = [settings.serverName, settings.repo, settings.gistID,
         settings.accessToken, settings.ip, settings.directory];
     required.forEach(element => {
-        console.log(element);
         if (element === '' || element === null){
             canHost = false;
         }

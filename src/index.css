@@ -83,6 +83,15 @@ button:hover {
   background-color: #252525
 }
 
+button.disable {
+  background-color: transparent;
+  color: rgb(100, 100, 100);
+}
+
+button.disable:hover{
+  pointer-events: none;
+}
+
 .input-button {
   background-color: #3b4e92;
   padding: 10px 0px;
