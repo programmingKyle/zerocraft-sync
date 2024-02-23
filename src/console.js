@@ -16,7 +16,8 @@ api.onServerStatusUpdate((status) => {
     messageText_el.classList.add('console-message')
     messageText_el.textContent = status;
     consoleContent_el.append(messageText_el);
-})
+    consoleContent_el.scrollTop = consoleContent_el.scrollHeight;
+});
 
 document.addEventListener('keydown', async (e) => {
     let keyPress = e.key;
@@ -24,4 +25,4 @@ document.addEventListener('keydown', async (e) => {
         await api.sendTerminal({message: consoleTextInput_el.value});
         consoleTextInput_el.value = '';
     }
-})
+});

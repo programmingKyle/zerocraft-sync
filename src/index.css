@@ -258,6 +258,7 @@ h3.online {
   grid-template-rows: 1fr auto;
   grid-gap: 5px;
   margin: 10px;
+  overflow: hidden;
 }
 
 .console-content {
@@ -266,6 +267,7 @@ h3.online {
   background-color: #141414;
   border-radius: 5px;
   align-content: start;
+  overflow: auto;
 }
 
 .console-message {
