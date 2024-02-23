@@ -28,6 +28,7 @@ function isServerOnline(){
     } else {
         serverOnline = false;
         stopServerButton_el.style.display = 'none';
+        startServerButton_el.style.display = 'block';
     }
 }
 
@@ -48,6 +49,7 @@ startServerButton_el.addEventListener('click', async () => {
         toggleServerStatus();
         if (isHost){
             hostConsolePreview_el.style.display = 'grid';
+            refreshButton_el.style.display = 'none';
         }
         startControls_el.style.gridTemplateColumns = '1fr';
         startControls_el.style.display = 'none';
@@ -98,10 +100,11 @@ api.onServerStatusUpdate(async (status) => {
         await updateGist();
         setTimeout(() => {
             startControls_el.style.display = 'grid';
-            startControls_el.style.gridTemplateColumns = 'auto 1fr';
+            startControls_el.style.gridTemplateColumns = 'auto auto 1fr';
             hostConsolePreview_el.style.display = 'none';
             startServerButton_el.style.display = 'block';
             toggleOptionsButton_el.style.display = 'block';
+            refreshButton_el.style.display= 'block';
         }, 1000);
     }
 });

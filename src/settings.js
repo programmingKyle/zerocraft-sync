@@ -57,15 +57,15 @@ saveSettingsButton_el.addEventListener('click', async () => {
 
     settings = await api.hostSettingsHandler({request: 'Get'});
 
+    if (settings !== null){
+        await getGist();
+    }
+
     const canHost = canHostCheck();
-    if (canHost){
+    if (canHost && gist.status === 'OFFLINE'){
         startServerButton_el.style.display = 'block';
     } else {
         startServerButton_el.style.display = 'none';
-    }
-
-    if (settings !== null){
-        await getGist();
     }
 });
 
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         await getGist();
         const canHost = canHostCheck();
-        if (canHost){
+        if (canHost && gist.status === 'OFFLINE'){
             startServerButton_el.style.display = 'block';
         }
         serverTitleInput_el.value = settings.serverName;
