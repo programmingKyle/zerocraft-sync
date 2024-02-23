@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         gistIDInput_el.value = settings.gistID;
         accessTokenInput_el.value = settings.accessToken;
         ipInput_el.value = settings.ip;
-        selectedDirectoryText_el.value = settings.directory;    
+        selectedDirectoryText_el.textContent = settings.directory;    
     }
 });
 
