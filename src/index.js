@@ -1,14 +1,15 @@
-const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard  } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard } = require('electron');
 const path = require('path');
 const fs = require('fs-extra');
 const axios = require('axios');
 const { spawn } = require('child_process');
 const simpleGit = require('simple-git');
 const archiver = require('archiver');
+const { exec } = require('child_process');
 
 let mainWindow;
 let isMaximized;
-let serverProcess;
+let serverProcess; //Minecraft Server Terminal
 let directory; 
 let settings;
 let allowClose = true;
@@ -56,6 +57,7 @@ app.on('ready', () => {
     console.log('Shortcut not found');
   }
   createBackupFolder();
+  requiredSetup();
   createWindow();
 });
 
@@ -78,6 +80,33 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+async function requiredSetup(){
+  const result = await checkMinecraftLoopback();
+  console.log(result);
+}
+
+async function checkMinecraftLoopback() {
+  return new Promise((resolve, reject) => {
+    exec('CheckNetIsolation.exe LoopbackExempt -s', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error: ${error.message}`);
+        reject(error.message);
+        return;
+      }
+      const mcLoopback = stdout.split('\n').map(line => line.trim()).filter(line => line !== '');
+      mcLoopback.forEach(line => {
+        if (line.includes('Name: microsoft.minecraft')){
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  });
+}
+
+
+
 ipcMain.handle('paste-settings-clipboard', () => {
   const clipboardData = clipboard.readText();
   return clipboardData;
