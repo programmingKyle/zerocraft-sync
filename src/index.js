@@ -196,7 +196,7 @@ async function getWorldRepo(directory) {
       await git.addRemote('origin', remoteUrlWithToken);
       await git.raw(['symbolic-ref', 'HEAD', 'refs/heads/main']);
       await git.raw(['branch', '-m', 'main']);
-      await git.fetch('origin', 'main', ['--tags']);
+      await git.fetch('origin', 'main', ['--tags', '--depth=1']);
       await git.reset(['--hard', 'origin/main']);
       await git.push(['-u', 'origin', 'main']);
     } else {
