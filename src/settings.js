@@ -65,7 +65,6 @@ saveSettingsButton_el.addEventListener('click', async () => {
     if (canHost){
         await serverLoopback();
     } else if (gist.status === 'OFFLINE') {
-        console.log('turn it on');
         startServerButton_el.style.display = 'block';
     } else {
         startServerButton_el.style.display = 'none';

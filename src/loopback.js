@@ -4,14 +4,14 @@ const exitLoopbackButton_el = document.getElementById('exitLoopbackButton');
 
 async function serverLoopback(){
     const loopbackResult = await api.requiredLoopback();
-    console.log(loopbackResult);
     if (loopbackResult === 'error'){
         loopbackOverlay_el.style.display = 'flex';
     }
 }
 
-retryLoopbackButton_el.addEventListener('click', () => {
-
+retryLoopbackButton_el.addEventListener('click', async () => {
+    loopbackOverlay_el.style.display = 'none';
+    await serverLoopback();
 });
 
 exitLoopbackButton_el.addEventListener('click', async () => {

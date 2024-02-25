@@ -88,7 +88,6 @@ ipcMain.handle('required-loopback', async() => {
     const result = await checkMinecraftLoopback();
     if (!result) {
       const enableResults = await enableMinecraftLoopback();
-      console.log(enableResults);
       return 'enabled';
     } else {
       return 'exists';
@@ -120,13 +119,13 @@ async function checkMinecraftLoopback() {
         return;
       }
       const mcLoopback = stdout.split('\n').map(line => line.trim()).filter(line => line !== '');
+      includesLoopback = false;
       mcLoopback.forEach(line => {
         if (line.includes('Name: microsoft.minecraft')){
-          resolve(true);
-        } else {
-          resolve(false);
+          includesLoopback = true;
         }
       });
+      resolve(includesLoopback);
     });
   });
 }
