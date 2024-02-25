@@ -282,3 +282,20 @@ h3.online {
   grid-template-columns: 1fr auto;
   grid-gap: 3px;
 }
+
+.loopback-container {
+  background: #313131;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  display: grid;
+  grid-gap: 5px;
+  width: 75%;
+}
+
+.loopback-option {
+  background-color: #141414;
+  border-radius: 5px;
+  padding: 10px;
+}

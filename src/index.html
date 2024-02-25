@@ -7,6 +7,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
   <body>
+    <div id="loopbackOverlay" class="overlay" style="display: none;">
+      <div class="loopback-container" style="text-align: center;">
+        <div style="display: grid">
+          <h4 style="color: white">Could not enable Minecraft Loopback.</h4>
+          <div style="display: grid; margin-top: 20px;">
+            <h4>Option 1</h4>
+            <h5 class="loopback-option">Exit Zerocraft Sync and reopen as Administrator</h5>
+          </div>
+          <h4>or</h4>
+          <h4>Option 2</h4>
+          <div style="display: grid">
+            <h5 class="loopback-option">Open Powershell as Admin and input the following command and click retry:</h5>
+            <div style="display: grid; grid-template-columns: 1fr auto; grid-gap: 3px; margin-top: 5px;">
+              <h6 style="background-color: #141414; border-radius: 5px; white-space: nowrap; overflow: auto;">CheckNetIsolation.exe LoopbackExempt -a -p=S-1-15-2-1958404141-86561845-1752920682-3514627264-368642714-62675701-733520436</h6>
+              <button class="slim-button fas fa-clipboard"></button>
+            </div>  
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px; margin-top: 20px;">
+          <button id="retryLoopbackButton" class="input-button">Retry</button>
+          <button id="exitLoopbackButton" class="input-button">Exit</button>
+        </div>
+      </div>
+    </div>
+
+
     <div id="stopOverlay" class="overlay" style="display: none;">
       <div id="stopOverlayContent" class="stop-container" style="text-align: center;">
         <div style="display: grid">
@@ -86,4 +112,5 @@
   <script src="settings.js"></script>
   <script src="gist.js"></script>
   <script src="server.js"></script>
+  <script src="loopback.js"></script>
 </html>

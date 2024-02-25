@@ -133,8 +133,3 @@ pasteAllSettings_el.addEventListener('click', async () => {
     gistIDInput_el.value = clipboardValues.gistID;
     accessTokenInput_el.value = clipboardValues.accessToken;
 });
-
-async function serverLoopback(){
-    const loopbackResult = await api.requiredLoopback();
-    console.log(loopbackResult);
-}
