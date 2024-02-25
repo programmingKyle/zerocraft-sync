@@ -49,7 +49,7 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
+app.on('ready', async () => {
   const ret = globalShortcut.register('CommandOrControl+R', () => {
     return;
   });
@@ -57,7 +57,7 @@ app.on('ready', () => {
     console.log('Shortcut not found');
   }
   createBackupFolder();
-  requiredSetup();
+  await requiredLoopback();
   createWindow();
 });
 
@@ -80,9 +80,30 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-async function requiredSetup(){
-  const result = await checkMinecraftLoopback();
-  console.log(result);
+async function requiredLoopback() {
+  try {
+    const result = await checkMinecraftLoopback();
+    console.log(result);
+    if (!result) {
+      const enableResults = await enableMinecraftLoopback();
+      console.log(enableResults);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function enableMinecraftLoopback() {
+  return new Promise((resolve, reject) => {
+    exec('CheckNetIsolation.exe LoopbackExempt -a -p=S-1-15-2-1958404141-86561845-1752920682-3514627264-368642714-62675701-733520436', (error, stdout, stderr) => {
+      if (error) {
+        reject('Application needs to be run in Administrator');
+        return;
+      } else {
+        resolve(stdout);
+      }
+    });
+  });
 }
 
 async function checkMinecraftLoopback() {
