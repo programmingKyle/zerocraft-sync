@@ -179,6 +179,9 @@ ipcMain.on('server-status', (event, status) => {
 async function getWorldRepo(directory) {
   mainWindow.webContents.send('server-status', 'Gathering World Data');
   const worldDir = path.join(directory, 'worlds');
+  if (!fs.existsSync(worldDir)) {
+    fs.mkdirSync(worldDir);
+  }
   const repoUrl = settings.repo;
   const username = repoUrl.split('/')[3];
   const accessToken = settings.accessToken;
@@ -196,6 +199,15 @@ async function getWorldRepo(directory) {
       await git.fetch('origin', 'main', ['--tags']);
       await git.reset(['--hard', 'origin/main']);
       await git.push(['-u', 'origin', 'main']);
+    } else {
+      const remote = await git.getRemotes(true /* get more details */);
+      const expectedRemoteUrl = repoUrl.replace('https://', `https://${username}:${accessToken}@`);    
+      if (remote && remote.length > 0 && remote[0].refs.push === expectedRemoteUrl) {
+        await git.fetch('origin', 'main', ['--tags']);
+        await git.reset(['--hard', 'origin/main']);
+      } else {
+        console.error('This is not the expected repo. Please check the remote URL.');
+      }
     }
   } catch (error) {
     console.error('Error in getWorldRepo:', error);
