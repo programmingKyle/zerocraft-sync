@@ -17,4 +17,5 @@ contextBridge.exposeInMainWorld('api', {
     sendTerminal: (data) => ipcRenderer.invoke('send-terminal', data),
 
     requiredLoopback: () => ipcRenderer.invoke('required-loopback'),
+    closeApp: () => ipcRenderer.invoke('close-app'),
 });

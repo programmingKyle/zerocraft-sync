@@ -9,3 +9,11 @@ async function serverLoopback(){
         loopbackOverlay_el.style.display = 'flex';
     }
 }
+
+retryLoopbackButton_el.addEventListener('click', () => {
+
+});
+
+exitLoopbackButton_el.addEventListener('click', async () => {
+    await api.closeApp();
+});
