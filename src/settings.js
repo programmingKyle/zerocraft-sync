@@ -49,7 +49,7 @@ saveSettingsButton_el.addEventListener('click', async () => {
         gistID: gistIDInput_el.value,
         accessToken: accessTokenInput_el.value,
         ip: ipInput_el.value,
-        directory: serverDirectory
+        directory: selectedDirectoryText_el.textContent
     }
 
     await api.hostSettingsHandler({request: 'Add', settings: values});
@@ -62,7 +62,10 @@ saveSettingsButton_el.addEventListener('click', async () => {
     }
 
     const canHost = canHostCheck();
-    if (canHost && gist.status === 'OFFLINE'){
+    if (canHost){
+        await serverLoopback();
+    } else if (gist.status === 'OFFLINE') {
+        console.log('turn it on');
         startServerButton_el.style.display = 'block';
     } else {
         startServerButton_el.style.display = 'none';
@@ -76,7 +79,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
         await getGist();
         const canHost = canHostCheck();
-        if (canHost && gist.status === 'OFFLINE'){
+        if (canHost){
+            await serverLoopback();
+        } else if (gist.status === 'OFFLINE'){
             startServerButton_el.style.display = 'block';
         }
         serverTitleInput_el.value = settings.serverName;
@@ -84,7 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         gistIDInput_el.value = settings.gistID;
         accessTokenInput_el.value = settings.accessToken;
         ipInput_el.value = settings.ip;
-        selectedDirectoryText_el.textContent = settings.directory;    
+        selectedDirectoryText_el.textContent = settings.directory;   
     }
 });
 
@@ -128,3 +133,8 @@ pasteAllSettings_el.addEventListener('click', async () => {
     gistIDInput_el.value = clipboardValues.gistID;
     accessTokenInput_el.value = clipboardValues.accessToken;
 });
+
+async function serverLoopback(){
+    const loopbackResult = await api.requiredLoopback();
+    console.log(loopbackResult);
+}
