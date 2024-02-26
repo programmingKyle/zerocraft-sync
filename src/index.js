@@ -90,8 +90,18 @@ autoUpdater.on('update-not-available', () => {
 
 autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Update Downloaded');
-  autoUpdater.quitAndInstall();
+  ensureSafeQuitAndInstall()
 });
+
+function ensureSafeQuitAndInstall() {
+  setImmediate(() => {
+    app.removeAllListeners("window-all-closed")
+    if (mainWindow != null) {
+      mainWindow.close()
+    }
+    autoUpdater.quitAndInstall(false)
+  })
+}
 
 autoUpdater.on('error', (error) => {
   mainWindow.webContents.send('auto-updater-callback', `Update check error: ${error.message}`);
