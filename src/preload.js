@@ -18,4 +18,12 @@ contextBridge.exposeInMainWorld('api', {
 
     requiredLoopback: () => ipcRenderer.invoke('required-loopback'),
     closeApp: () => ipcRenderer.invoke('close-app'),
+
+
+    // Auto Updater
+    autoUpdaterCallback: (callback) => {
+        ipcRenderer.on('auto-updater-callback', (_, status) => {
+            callback(status);
+        });
+    },
 });

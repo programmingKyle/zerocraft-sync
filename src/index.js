@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard, autoUpdater } = require('electron');
+
 const path = require('path');
 const fs = require('fs-extra');
 const axios = require('axios');
@@ -6,6 +7,8 @@ const { spawn } = require('child_process');
 const simpleGit = require('simple-git');
 const archiver = require('archiver');
 const { exec } = require('child_process');
+
+app.setAppUserModelId('com.squirrel.programmingKyle.zerocraft-sync');
 
 let mainWindow;
 let isMaximized;
@@ -16,11 +19,6 @@ let allowClose = true;
 
 let terminalWindow;
 let terminalOpen;
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  app.quit();
-}
 
 const createWindow = () => {
   // Create the browser window.
@@ -50,15 +48,103 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  const ret = globalShortcut.register('CommandOrControl+R', () => {
+  globalShortcut.register('CommandOrControl+R', () => {
     return;
   });
-  if (!ret){
-    console.log('Shortcut not found');
+
+  if (app.isPackaged) {
+    if (handleSquirrelEvent()) {
+      return;
+    }
+  } else if (process.argv.includes('--squirrel-firstrun')) {
+    autoUpdater.setFeedURL('https://github.com/programmingKyle/zerocraft-sync/releases/latest');
+    autoUpdater.checkForUpdatesAndNotify();    
   }
+
   createBackupFolder();
   createWindow();
+
+  mainWindow.webContents.send('auto-updater-callback', 'App Ready');
 });
+
+// Handle creating/removing shortcuts on Windows when installing/uninstalling.
+if (require('electron-squirrel-startup')) return;
+
+
+autoUpdater.on('update-available', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'Update Available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'Update Downloaded');
+});
+
+autoUpdater.on('update-not-available', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'No Updates Available');
+});
+
+
+
+function handleSquirrelEvent() {
+  if (process.argv.length === 1) {
+    return false;
+  }
+
+  const ChildProcess = require('child_process');
+
+  const appFolder = path.resolve(process.execPath, '..');
+  const rootAtomFolder = path.resolve(appFolder, '..');
+  const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+  const exeName = path.basename(process.execPath);
+
+  const spawn = function(command, args) {
+    let spawnedProcess, error;
+
+    try {
+      spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
+    } catch (error) {}
+
+    return spawnedProcess;
+  };
+
+  const spawnUpdate = function(args) {
+    return spawn(updateDotExe, args);
+  };
+
+  const squirrelEvent = process.argv[1];
+  switch (squirrelEvent) {
+    case '--squirrel-install':
+    case '--squirrel-updated':
+      // Optionally do things such as:
+      // - Add your .exe to the PATH
+      // - Write to the registry for things like file associations and
+      //   explorer context menus
+
+      // Install desktop and start menu shortcuts
+      spawnUpdate(['--createShortcut', exeName]);
+
+      setTimeout(app.quit, 1000);
+      return true;
+
+    case '--squirrel-uninstall':
+      // Undo anything you did in the --squirrel-install and
+      // --squirrel-updated handlers
+
+      // Remove desktop and start menu shortcuts
+      spawnUpdate(['--removeShortcut', exeName]);
+
+      setTimeout(app.quit, 1000);
+      return true;
+
+    case '--squirrel-obsolete':
+      // This is called on the outgoing version of your app before
+      // we update to the new version - it's the opposite of
+      // --squirrel-updated
+
+      app.quit();
+      return true;
+  }
+};
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -176,10 +262,17 @@ ipcMain.handle('toggle-terminal', () => {
   }
 });
 
-function createBackupFolder(){
-  const backupDir = path.join(__dirname, 'backups');
-  if (!fs.existsSync(backupDir)){
-    fs.mkdirSync(backupDir);
+function createBackupFolder() {
+  const userDataPath = app.getPath('userData');
+  const backupDir = path.join(userDataPath, 'backups');
+  console.log('Backup Directory:', backupDir);
+
+  try {
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir);
+    }
+  } catch (error) {
+    console.error('Error creating backup directory:', error.message);
   }
 }
 
