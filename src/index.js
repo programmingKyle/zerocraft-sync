@@ -1,4 +1,5 @@
-const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard, autoUpdater } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard } = require('electron');
+const { autoUpdater } = require('electron-updater');
 
 const path = require('path');
 const fs = require('fs-extra');
@@ -32,8 +33,6 @@ const createWindow = () => {
     },
   });
 
-  mainWindow.webContents.send('auto-updater-callback', 'Trying');
-
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
@@ -45,6 +44,20 @@ const createWindow = () => {
       event.preventDefault();  // Prevent the window from closing
     }
   });
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.webContents.send('auto-updater-callback', 'Tryinig');  
+    if (app.isPackaged) {
+      mainWindow.webContents.send('auto-updater-callback', 'App is Packaged');
+      autoUpdater.setFeedURL({
+        provider: 'github',
+        owner: 'programmingKyle',
+        repo: 'zerocraft-sync',
+      });
+      autoUpdater.checkForUpdates();
+      mainWindow.webContents.send('auto-updater-callback', 'Checking');  
+    }
+  });
 };
 
 // This method will be called when Electron has finished
@@ -54,32 +67,33 @@ app.on('ready', () => {
   createBackupFolder();
   createWindow();
 
+  if (handleSquirrelEvent()) {
+    return;
+  }
+
   globalShortcut.register('CommandOrControl+R', () => {
     return;
   });
+});
 
-  if (app.isPackaged) {
-    if (handleSquirrelEvent()) {
-      return;
-    }
-  } else if (process.argv.includes('--squirrel-firstrun')) {
-    autoUpdater.setFeedURL('https://github.com/programmingKyle/zerocraft-sync/releases/latest');
-    autoUpdater.checkForUpdates();    
-  }
-
-  mainWindow.webContents.send('auto-updater-callback', 'Tryinig');
+autoUpdater.on('checking-for-update', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'Checking for Update');
 });
 
 autoUpdater.on('update-available', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Update Available');
 });
 
+autoUpdater.on('update-not-available', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'No Updates Available');
+});
+
 autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Update Downloaded');
 });
 
-autoUpdater.on('update-not-available', () => {
-  mainWindow.webContents.send('auto-updater-callback', 'No Updates Available');
+autoUpdater.on('error', (error) => {
+  mainWindow.webContents.send('auto-updater-callback', `Update check error: ${error.message}`);
 });
 
 

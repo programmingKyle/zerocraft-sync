@@ -24,7 +24,6 @@ contextBridge.exposeInMainWorld('api', {
     // Auto Updater
     autoUpdaterCallback: (callback) => {
         ipcRenderer.on('auto-updater-callback', (_, status) => {
-            console.log(status);
             callback(status);
         });
     },
