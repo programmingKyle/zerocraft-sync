@@ -1,0 +1,8 @@
+appId: com.squirrel.programmingKyle.zerocraft-sync
+productName: Zerocraft Sync
+win:
+  target: nsis
+  artifactName: "Zerocraft-Sync-Setup-${version}.${ext}"
+publish:
+  provider: github
+  repo: programmingKyle/zerocraft-sync

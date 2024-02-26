@@ -1,15 +1,14 @@
 {
   "name": "zerocraft-sync",
   "productName": "Zerocraft Sync",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "My Electron application description",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "package": "electron-builder",
+    "make": "electron-builder --win",
+    "publish": "electron-builder --publish always"
   },
   "keywords": [],
   "author": {
@@ -32,13 +31,7 @@
     "@electron-forge/maker-squirrel": "^7.2.0",
     "@electron-forge/maker-zip": "^7.2.0",
     "@electron-forge/plugin-auto-unpack-natives": "^7.2.0",
-    "electron": "28.2.2"
-  },
-  "build": {
-    "appId": "com.squirrel.programmingKyle.zerocraft-sync",
-    "productName": "Zerocraft Sync",
-    "win": {
-      "target": "nsis"
-    }
+    "electron": "28.2.2",
+    "electron-builder": "^24.12.0"
   }
 }

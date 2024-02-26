@@ -90,6 +90,7 @@ autoUpdater.on('update-not-available', () => {
 
 autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Update Downloaded');
+  autoUpdater.quitAndInstall();
 });
 
 autoUpdater.on('error', (error) => {
