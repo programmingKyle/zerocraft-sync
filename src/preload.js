@@ -8,6 +8,7 @@ contextBridge.exposeInMainWorld('api', {
     selectDirectory: () => ipcRenderer.invoke('select-directory'),
     onServerStatusUpdate: (callback) => {
         ipcRenderer.on('server-status', (_, status) => {
+            console.log(status);
             callback(status);
         });
     },
@@ -23,6 +24,7 @@ contextBridge.exposeInMainWorld('api', {
     // Auto Updater
     autoUpdaterCallback: (callback) => {
         ipcRenderer.on('auto-updater-callback', (_, status) => {
+            console.log(status);
             callback(status);
         });
     },

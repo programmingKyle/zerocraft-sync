@@ -8,6 +8,7 @@ const simpleGit = require('simple-git');
 const archiver = require('archiver');
 const { exec } = require('child_process');
 
+if (require('electron-squirrel-startup')) return;
 app.setAppUserModelId('com.squirrel.programmingKyle.zerocraft-sync');
 
 let mainWindow;
@@ -31,6 +32,8 @@ const createWindow = () => {
     },
   });
 
+  mainWindow.webContents.send('auto-updater-callback', 'Trying');
+
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
@@ -48,6 +51,9 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  createBackupFolder();
+  createWindow();
+
   globalShortcut.register('CommandOrControl+R', () => {
     return;
   });
@@ -58,18 +64,11 @@ app.on('ready', () => {
     }
   } else if (process.argv.includes('--squirrel-firstrun')) {
     autoUpdater.setFeedURL('https://github.com/programmingKyle/zerocraft-sync/releases/latest');
-    autoUpdater.checkForUpdatesAndNotify();    
+    autoUpdater.checkForUpdates();    
   }
 
-  createBackupFolder();
-  createWindow();
-
-  mainWindow.webContents.send('auto-updater-callback', 'App Ready');
+  mainWindow.webContents.send('auto-updater-callback', 'Tryinig');
 });
-
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) return;
-
 
 autoUpdater.on('update-available', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Update Available');
@@ -265,7 +264,6 @@ ipcMain.handle('toggle-terminal', () => {
 function createBackupFolder() {
   const userDataPath = app.getPath('userData');
   const backupDir = path.join(userDataPath, 'backups');
-  console.log('Backup Directory:', backupDir);
 
   try {
     if (!fs.existsSync(backupDir)) {
@@ -277,7 +275,8 @@ function createBackupFolder() {
 }
 
 async function createWorldBackup() {
-  const backupRootDir = path.join(__dirname, 'backups');
+  const userDataPath = app.getPath('userData');
+  const backupRootDir = path.join(userDataPath, 'backups');
   const worldDirectory = path.join(directory, 'worlds', 'Bedrock level');
 
   try {
@@ -346,12 +345,14 @@ async function getWorldRepo(directory) {
       await git.fetch('origin', 'main', ['--tags', '--depth=1']);
       await git.reset(['--hard', 'origin/main']);
       await git.push(['-u', 'origin', 'main']);
+      await git.raw(['gc']);
     } else {
       const remote = await git.getRemotes(true /* get more details */);
       const expectedRemoteUrl = repoUrl.replace('https://', `https://${username}:${accessToken}@`);    
       if (remote && remote.length > 0 && remote[0].refs.push === expectedRemoteUrl) {
         await git.fetch('origin', 'main', ['--tags']);
         await git.reset(['--hard', 'origin/main']);
+        await git.raw(['gc']);
       } else {
         console.error('This is not the expected repo. Please check the remote URL.');
       }

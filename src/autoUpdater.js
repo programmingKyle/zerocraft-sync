@@ -1,3 +1,3 @@
-api.autoUpdaterCallback((status) => {
+api.onAutoUpdaterCallback((status) => {
     console.log(status);
 });
