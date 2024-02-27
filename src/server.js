@@ -82,6 +82,7 @@ confirmStopButton_el.addEventListener('click', async () => {
         stopServerButton_el.style.display = 'none';
         api.checkAndCloseTerminal();
         await getGist();
+        hasUpdatedProperties = false;
         if (gist.status === 'ONLINE'){
             await api.serverHandler({request: 'Stop'});
         }

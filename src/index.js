@@ -100,8 +100,6 @@ function updateServerProperties(directory, content){
   fs.writeFile(filePath, content, 'utf8', (err) => {
     if (err) {
       console.error('Error updating server.properties:', err.message);
-    } else {
-      console.log('server.properties updated successfully.');
     }
   });
 }
