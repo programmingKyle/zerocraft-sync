@@ -78,6 +78,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     settings = await api.hostSettingsHandler({request: 'Get'});
     if (settings === null){
         selectUserTypeOverlay_el.style.display = 'flex';
+        const ztIP = await api.getZerotierIP();
+        ipInput_el.value =  ztIP;
         //settingsOverlay_el.style.display = 'flex';
     } else {
         await getGist();

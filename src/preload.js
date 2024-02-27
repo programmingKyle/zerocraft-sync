@@ -29,4 +29,5 @@ contextBridge.exposeInMainWorld('api', {
     },
 
     restartAndUpdate: () => ipcRenderer.invoke('restart-and-update'),
+    getZerotierIP: () => ipcRenderer.invoke('get-zerotier-ip'),
 });

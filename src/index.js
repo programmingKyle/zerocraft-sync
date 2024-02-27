@@ -75,6 +75,30 @@ app.on('ready', () => {
   */
 });
 
+ipcMain.handle('get-zerotier-ip', () => {
+  return new Promise((resolve, reject) => {
+    exec('ipconfig', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing ipconfig: ${error.message}`);
+        reject(error.message);
+        return;
+      }
+      const zeroTierIPRegex = /Ethernet adapter ZeroTier One[^\n]*\n(?:[^\n]*\n)*.*IPv4 Address[.\s]+: ([\d.]+)/;
+      const match = stdout.match(zeroTierIPRegex);
+  
+      if (match) {
+        const zeroTierIP = match[1];
+        // You can use the ZeroTier IP for further actions in your app.
+        resolve(zeroTierIP);
+        return;
+      } else {
+        resolve('No Zerotier Network');
+        return;
+      }
+    });  
+  });
+});
+
 autoUpdater.on('checking-for-update', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Checking for Update');
 });
