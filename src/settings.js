@@ -17,6 +17,8 @@ let settings;
 
 let serverDirectory = null;
 
+let hideHostSettings = false;
+
 const requiredInputs = [
     gistIDInput_el, accessTokenInput_el
 ];
@@ -53,6 +55,8 @@ saveSettingsButton_el.addEventListener('click', async () => {
 
     await api.hostSettingsHandler({request: 'Add', settings: values});
     settingsOverlay_el.style.display = 'none';
+
+    toggleHostInputs('block');
 
     settings = await api.hostSettingsHandler({request: 'Get'});
 
@@ -196,6 +200,8 @@ specificUserDataButton_el.addEventListener('click', () => {
 });
 
 function toggleHostInputs(display){
+    hideHostSettings = display === 'none' ? true : false;
+    console.log(hideHostSettings);
     const hostInputs = [serverTitleInput_el, repoLinkInput_el, ipInput_el, selectedDirectoryText_el, selectDirectoryButton_el]
     hostInputs.forEach(element => {
         element.style.display = display;
