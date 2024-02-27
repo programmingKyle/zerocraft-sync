@@ -152,6 +152,7 @@ const pasteHostDataButton_el = document.getElementById('pasteHostDataButton');
 const specificHostDataButton_el = document.getElementById('specificHostDataButton');
 const pasteUserDataButton_el = document.getElementById('pasteUserDataButton');
 const specificUserDataButton_el = document.getElementById('specificUserDataButton');
+const selectTypeQuitButton_el = document.getElementById('selectTypeQuitButton');
 
 // Overlay Content
 const selectedHost_el = document.getElementById('selectedHost');
@@ -222,4 +223,8 @@ backHostButton_el.addEventListener('click', () => {
     settingsOverlay_el.style.display = 'none';
     selectedHost_el.style.display = 'none';
     selectUserTypeOverlay_el.style.display = 'flex';
+});
+
+selectTypeQuitButton_el.addEventListener('click', async () => {
+    await api.closeApp();
 });
