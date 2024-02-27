@@ -52,7 +52,7 @@ const createWindow = () => {
         owner: 'programmingKyle',
         repo: 'zerocraft-sync',
       });
-      autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdatesAndNotify();
     }
   });
 };
@@ -89,7 +89,11 @@ autoUpdater.on('update-not-available', () => {
 
 autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Update Downloaded');
-  ensureSafeQuitAndInstall()
+  //ensureSafeQuitAndInstall();
+});
+
+ipcMain.handle('restart-and-update', () => {
+  ensureSafeQuitAndInstall();
 });
 
 function ensureSafeQuitAndInstall() {

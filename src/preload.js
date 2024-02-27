@@ -27,4 +27,6 @@ contextBridge.exposeInMainWorld('api', {
             callback(status);
         });
     },
+
+    restartAndUpdate: () => ipcRenderer.invoke('restart-and-update'),
 });
