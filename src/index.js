@@ -75,9 +75,11 @@ app.on('ready', () => {
   */
 });
 
+const { exec } = require('child_process');
+
 ipcMain.handle('install-git', async (event, args) => {
   return new Promise((resolve, reject) => {
-    exec('winget install Git.Git', (error, stdout, stderr) => {
+    const gitInstallationProcess = exec('winget install Git.Git', (error, stdout, stderr) => {
       if (error) {
         console.error(`Error executing git: ${error.message}`);
         reject(error.message);
@@ -85,9 +87,15 @@ ipcMain.handle('install-git', async (event, args) => {
       }
 
       if (stderr) {
-        console.error('Error during git command:', stderr);
-        reject(stderr);
-        return;
+        // Check if stderr contains the agreement message
+        if (stderr.includes("You must agree to the license terms before installing")) {
+          // If agreement message is found, simulate pressing 'Enter'
+          gitInstallationProcess.stdin.write('\r\n');
+        } else {
+          console.error('Error during git command:', stderr);
+          reject(stderr);
+          return;
+        }
       } else {
         console.log('Git installed:', stdout.trim());
         resolve(stdout.trim());
