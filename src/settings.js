@@ -58,6 +58,8 @@ saveSettingsButton_el.addEventListener('click', async () => {
 
     toggleHostInputs('block');
 
+    await checkifGitExists();
+
     settings = await api.hostSettingsHandler({request: 'Get'});
 
     if (settings !== null){
@@ -82,6 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         ipInput_el.value =  ztIP;
         //settingsOverlay_el.style.display = 'flex';
     } else {
+        await checkifGitExists();
         await getGist();
         const canHost = canHostCheck();
         if (canHost){

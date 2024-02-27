@@ -75,6 +75,43 @@ app.on('ready', () => {
   */
 });
 
+ipcMain.handle('install-git', async (event, args) => {
+  return new Promise((resolve, reject) => {
+    exec('winget install Git.Git', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error executing git: ${error.message}`);
+        reject(error.message);
+        return;
+      }
+
+      if (stderr) {
+        console.error('Error during git command:', stderr);
+        reject(stderr);
+        return;
+      } else {
+        console.log('Git installed:', stdout.trim());
+        resolve(stdout.trim());
+        return;
+      }
+    });
+  });
+});
+
+ipcMain.handle('check-git-exists', () => {
+  return new Promise((resolve, reject) => {
+    exec('git --version', (error, stdout, stderr) => {
+      if (error || stderr) {
+        console.error(`Error executing git: ${error ? error.message : stderr}`);
+        resolve(false);
+        return;
+      }
+
+      console.log('Git version:', stdout.trim());
+      resolve(true);
+    });
+  });
+});
+
 ipcMain.handle('get-zerotier-ip', () => {
   return new Promise((resolve, reject) => {
     exec('ipconfig', (error, stdout, stderr) => {

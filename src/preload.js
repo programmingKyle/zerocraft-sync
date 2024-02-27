@@ -30,4 +30,6 @@ contextBridge.exposeInMainWorld('api', {
 
     restartAndUpdate: () => ipcRenderer.invoke('restart-and-update'),
     getZerotierIP: () => ipcRenderer.invoke('get-zerotier-ip'),
+    checkGitExists: () => ipcRenderer.invoke('check-git-exists'),   
+    installGit: () => ipcRenderer.invoke('install-git'),
 });

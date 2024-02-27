@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   </head>
   <body>
+    <div id="gitOverlay" class="overlay" style="display: none;">
+      <div class="stop-container" style="text-align: center;">
+        <div style="display: grid">
+          <h2 id="gitStatusText">Please Allow Git to Install</h2>
+          <p style="text-align: center;">Git is used so that we can all keep up to date map data!</p>
+          <button id="gitOKButton" class="input-button" style="display: none;">Continue</button>
+        </div>
+      </div>
+    </div>
+
     <div id="updateOverlay" class="overlay" style="display: none;">
       <div class="stop-container" style="text-align: center;">
         <div style="display: grid">
@@ -161,4 +171,5 @@
   <script src="server.js"></script>
   <script src="loopback.js"></script>
   <script src="autoUpdater.js"></script>
+  <script src="checkGitExists.js"></script>
 </html>
