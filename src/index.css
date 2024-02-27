@@ -299,3 +299,29 @@ h3.online {
   border-radius: 5px;
   padding: 10px;
 }
+
+.select-container {
+  background: #313131;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  display: grid;
+  height: 70%;
+  width: 75%;
+  grid-gap: 5px;
+  grid-template-rows: auto 1fr;
+}
+
+.select-type-container {
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  grid-gap: 3px;
+}
+
+.select-user-type-button {
+  height: 100%;
+  width: 100%;
+  background-color:#3b4e92;
+  font-size: 30px;
+}

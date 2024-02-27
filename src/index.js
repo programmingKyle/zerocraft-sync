@@ -46,16 +46,13 @@ const createWindow = () => {
   });
 
   mainWindow.once('ready-to-show', () => {
-    mainWindow.webContents.send('auto-updater-callback', 'Tryinig');  
     if (app.isPackaged) {
-      mainWindow.webContents.send('auto-updater-callback', 'App is Packaged');
       autoUpdater.setFeedURL({
         provider: 'github',
         owner: 'programmingKyle',
         repo: 'zerocraft-sync',
       });
       autoUpdater.checkForUpdates();
-      mainWindow.webContents.send('auto-updater-callback', 'Checking');  
     }
   });
 };
@@ -71,9 +68,11 @@ app.on('ready', () => {
     return;
   }
 
+  /*
   globalShortcut.register('CommandOrControl+R', () => {
     return;
   });
+  */
 });
 
 autoUpdater.on('checking-for-update', () => {

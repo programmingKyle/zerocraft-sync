@@ -45,8 +45,28 @@
       </div>
     </div>
 
+    <div id="selectUserTypeOverlay" class="overlay" style="display: none;">
+      <div class="select-container" style="text-align: center;">
+        <div style="display: grid">
+          <h2>Select One</h2>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 5px;">
+          <div class="select-type-container">
+            <button id="selectUserButton" class="select-user-type-button fas fa-user"></button>
+            <h3>User</h3>
+            <p style="text-align: center;">Let me see when the server is online!</p>
+          </div>
+          <div class="select-type-container">
+            <button id="selectHostButton" class="select-user-type-button fas fa-crown"></button>
+            <h3>Host</h3>
+            <p style="text-align: center;">Let me host when server is offline!</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div id="settingsOverlay" class="overlay" style="display: none;">
+
+    <div id="hostSettingsOverlay" class="overlay" style="display: none;">
       <div id="settingsContent" class="centered-container" style="text-align: center;">
         <div style="display: grid">
           <h2>Host Settings</h2>

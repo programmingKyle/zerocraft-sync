@@ -10,9 +10,12 @@ const ipInput_el = document.getElementById('ipInput');
 const repoLinkInput_el = document.getElementById('repoLinkInput');
 const toggleOptionsButton_el = document.getElementById('toggleOptionsButton');
 const pasteAllSettings_el = document.getElementById('pasteAllSettings');
-
 const selectedDirectoryText_el = document.getElementById('selectedDirectoryText');
 const selectDirectoryButton_el = document.getElementById('selectDirectoryButton');
+
+const selectUserTypeOverlay_el = document.getElementById('selectUserTypeOverlay');
+const selectUserButton_el = document.getElementById('selectUserButton');
+const selectHostButton_el = document.getElementById('selectHostButton');
 
 let settings;
 
@@ -74,7 +77,8 @@ saveSettingsButton_el.addEventListener('click', async () => {
 document.addEventListener('DOMContentLoaded', async () => {
     settings = await api.hostSettingsHandler({request: 'Get'});
     if (settings === null){
-        settingsOverlay_el.style.display = 'flex';
+        selectUserTypeOverlay_el.style.display = 'flex';
+        //settingsOverlay_el.style.display = 'flex';
     } else {
         await getGist();
         const canHost = canHostCheck();
