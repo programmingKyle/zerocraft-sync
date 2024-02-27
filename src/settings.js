@@ -52,7 +52,7 @@ saveSettingsButton_el.addEventListener('click', async () => {
     }
 
     await api.hostSettingsHandler({request: 'Add', settings: values});
-    settingsOverlay_el.style.display = 'none';
+    hostSettingsOverlay_el.style.display = 'none';
 
     settings = await api.hostSettingsHandler({request: 'Get'});
 
@@ -113,6 +113,8 @@ selectDirectoryButton_el.addEventListener('click', async () => {
 
 toggleOptionsButton_el.addEventListener('click', () => {
     hostSettingsOverlay_el.style.display = 'flex';
+    selectedHost_el.style.display = 'none';
+    hostSettingsSpecifics_el.style.display = 'grid';
     backSettingsButton_el.style.display = 'block';
 });
 
