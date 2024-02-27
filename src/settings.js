@@ -43,13 +43,13 @@ saveSettingsButton_el.addEventListener('click', async () => {
         return;
     }
     const values = {
-        serverName: serverTitleInput_el.value,
-        repo: repoLinkInput_el.value,
-        gistID: gistIDInput_el.value,
-        accessToken: accessTokenInput_el.value,
-        ip: ipInput_el.value,
-        directory: selectedDirectoryText_el.textContent
-    }
+        serverName: serverTitleInput_el.value.trim() || null,
+        repo: repoLinkInput_el.value.trim() || null,
+        gistID: gistIDInput_el.value.trim() || null,
+        accessToken: accessTokenInput_el.value.trim() || null,
+        ip: ipInput_el.value.trim() || null,
+        directory: selectedDirectoryText_el.textContent.trim() || null
+    };
 
     await api.hostSettingsHandler({request: 'Add', settings: values});
     settingsOverlay_el.style.display = 'none';
@@ -63,7 +63,7 @@ saveSettingsButton_el.addEventListener('click', async () => {
     const canHost = canHostCheck();
     if (canHost){
         await serverLoopback();
-    } else if (gist.status === 'OFFLINE') {
+    } else if (canHost && gist.status === 'OFFLINE') {
         startServerButton_el.style.display = 'block';
     } else {
         startServerButton_el.style.display = 'none';
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const canHost = canHostCheck();
         if (canHost){
             await serverLoopback();
-        } else if (gist.status === 'OFFLINE'){
+        } else if (canHost && gist.status === 'OFFLINE'){
             startServerButton_el.style.display = 'block';
         }
         serverTitleInput_el.value = settings.serverName;

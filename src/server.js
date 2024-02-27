@@ -28,7 +28,10 @@ function isServerOnline(){
     } else {
         serverOnline = false;
         stopServerButton_el.style.display = 'none';
-        startServerButton_el.style.display = 'block';
+        const canHost = canHostCheck();
+        if (canHost){
+            startServerButton_el.style.display = 'block';
+        }
     }
 }
 
@@ -60,7 +63,7 @@ startServerButton_el.addEventListener('click', async () => {
             await updateGist();
             await api.serverHandler({request: 'Start', directory: settings.directory});
         } else {
-            startServerButton_el.style.display = 'grid';
+            startServerButton_el.style.display = 'block';
             toggleOptionsButton_el.style.display = 'grid';
             startControls_el.style.display = 'grid';
         }
