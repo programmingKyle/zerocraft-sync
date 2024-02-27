@@ -7,6 +7,9 @@ api.autoUpdaterCallback((status) => {
     console.log(status);
     if (status === 'Update Available'){
         updateOverlay_el.style.display = 'flex';
+        if (selectUserTypeOverlay_el.style.display !== 'none'){
+            selectUserTypeOverlay_el.style.display = 'none'
+        }
     }
     if (status === 'Update Downloaded'){
         updateControlDiv_el.style.display = 'grid';
