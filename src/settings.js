@@ -211,7 +211,6 @@ specificUserDataButton_el.addEventListener('click', () => {
 
 function toggleHostInputs(display){
     hideHostSettings = display === 'none' ? true : false;
-    console.log(hideHostSettings);
     const hostInputs = [serverTitleInput_el, repoLinkInput_el, ipInput_el, selectedDirectoryText_el, selectDirectoryButton_el]
     hostInputs.forEach(element => {
         element.style.display = display;

@@ -7,7 +7,6 @@ async function checkifGitExists(){
     if (!checkGit){
         gitOverlay_el.style.display = 'flex';
         const installStatus = await api.installGit();
-        console.log(installStatus);
         gitStatusText_el.textContent = 'Git Installation Complete. Thank you!'
         gitOKButton_el.style.display = 'block';
     }

@@ -9,6 +9,12 @@ async function getGist(){
     gist = await api.gistHandler({request: 'View', gistID: settings.gistID, accessToken: settings.accessToken});
     isServerOnline();
     await populateInfo(gist);
+    await handleServerProperties();
+}
+
+async function handleServerProperties(){
+    await api.serverPropertiesHandler({gistLink: gist.serverPropertiesLink, directory: settings.directory, accessToken: settings.accessToken});
+
 }
 
 async function populateInfo(data){

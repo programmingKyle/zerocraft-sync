@@ -8,7 +8,6 @@ contextBridge.exposeInMainWorld('api', {
     selectDirectory: () => ipcRenderer.invoke('select-directory'),
     onServerStatusUpdate: (callback) => {
         ipcRenderer.on('server-status', (_, status) => {
-            console.log(status);
             callback(status);
         });
     },
@@ -32,4 +31,5 @@ contextBridge.exposeInMainWorld('api', {
     getZerotierIP: () => ipcRenderer.invoke('get-zerotier-ip'),
     checkGitExists: () => ipcRenderer.invoke('check-git-exists'),   
     installGit: () => ipcRenderer.invoke('install-git'),
-});
+
+    serverPropertiesHandler: (data) => ipcRenderer.invoke('server-properties-handler', data),});

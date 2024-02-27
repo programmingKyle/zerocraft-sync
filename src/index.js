@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, dialog, globalShortcut, clipboard } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const { URL } = require('url'); 
 
 const path = require('path');
 const fs = require('fs-extra');
@@ -75,7 +76,37 @@ app.on('ready', () => {
   */
 });
 
-const { exec } = require('child_process');
+ipcMain.handle('server-properties-handler', async (req, data) => {
+  if (!data || !data.gistLink || !data.directory || !data.accessToken) return;
+  try {
+    const gistUrl = new URL(data.gistLink);
+    const gistId = gistUrl.pathname.split('/').pop();
+    const gistResponse = await axios.get(`https://api.github.com/gists/${gistId}`, {
+      headers: {
+        Authorization: `Bearer ${data.accessToken}`,
+      },
+    });
+    const files = gistResponse.data.files;
+    if (!files || !files['server.properties']) {
+      return { error: 'Gist does not contain server.properties file' };
+    }
+    const content = files['server.properties'].content;
+    updateServerProperties(data.directory, content);
+  } catch (error) {
+    console.error('Error fetching Gist:', error.message);
+  }
+});
+
+function updateServerProperties(directory, content){
+  const filePath = path.join(directory, 'server.properties');
+  fs.writeFile(filePath, content, 'utf8', (err) => {
+    if (err) {
+      console.error('Error updating server.properties:', err.message);
+    } else {
+      console.log('server.properties updated successfully.');
+    }
+  });
+}
 
 ipcMain.handle('install-git', async (event, args) => {
   return new Promise((resolve, reject) => {
@@ -97,7 +128,6 @@ ipcMain.handle('install-git', async (event, args) => {
           return;
         }
       } else {
-        console.log('Git installed:', stdout.trim());
         resolve(stdout.trim());
         return;
       }
@@ -113,8 +143,6 @@ ipcMain.handle('check-git-exists', () => {
         resolve(false);
         return;
       }
-
-      console.log('Git version:', stdout.trim());
       resolve(true);
     });
   });
