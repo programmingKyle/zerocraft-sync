@@ -69,11 +69,9 @@ app.on('ready', () => {
     return;
   }
 
-  /*
   globalShortcut.register('CommandOrControl+R', () => {
     return;
   });
-  */
 });
 
 ipcMain.handle('server-properties-handler', async (req, data) => {
