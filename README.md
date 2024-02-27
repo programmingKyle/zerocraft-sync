@@ -81,7 +81,17 @@ If you have issues feel free to send a message!
 
 ![Screenshot 2024-02-18 173326](https://github.com/programmingKyle/zerocraft-sync/assets/155344874/c11cb37c-3f42-41b1-bc96-5e2c1719af7c)
 
+### Warning When Downloading the Release Installer:
+You will get a suspicious download warning. This app is not signed, can be removed if you package it yourself.
+![Screenshot 2024-02-27 152254](https://github.com/programmingKyle/zerocraft-sync/assets/155344874/378c8a9c-4e1b-4f70-8489-6477d8a2d8dd)
+![Screenshot 2024-02-27 152259](https://github.com/programmingKyle/zerocraft-sync/assets/155344874/7a787027-7936-4889-8618-4a889980bd07)
 
+
+### Pictures
+
+![Screenshot 2024-02-27 152546](https://github.com/programmingKyle/zerocraft-sync/assets/155344874/66ac6da9-725e-4932-8c4c-50145e3d250a)
+![Screenshot 2024-02-27 152238](https://github.com/programmingKyle/zerocraft-sync/assets/155344874/086250b9-38c6-4b48-8241-2d6952400f78)
+![Screenshot 2024-02-27 151948](https://github.com/programmingKyle/zerocraft-sync/assets/155344874/f099a182-5247-44e8-9515-b8e95d63f8ba)
 
 
 
