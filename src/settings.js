@@ -158,6 +158,10 @@ const selectedHost_el = document.getElementById('selectedHost');
 const selectedUser_el = document.getElementById('selectedUser');
 const hostSettingsSpecifics_el = document.getElementById('hostSettingsSpecifics');
 
+// Back Buttons
+const backUserButton_el = document.getElementById('backUserButton');
+const backHostButton_el = document.getElementById('backHostButton');
+
 selectUserButton_el.addEventListener('click', () => {
     selectUserTypeOverlay_el.style.display = 'none';
     settingsOverlay_el.style.display = 'flex';
@@ -206,5 +210,16 @@ function toggleHostInputs(display){
     hostInputs.forEach(element => {
         element.style.display = display;
     });    
-
 }
+
+backUserButton_el.addEventListener('click', () => {
+    settingsOverlay_el.style.display = 'none';;
+    selectedUser_el.style.display = 'none';
+    selectUserTypeOverlay_el.style.display = 'flex';
+});
+
+backHostButton_el.addEventListener('click', () => {
+    settingsOverlay_el.style.display = 'none';
+    selectedHost_el.style.display = 'none';
+    selectUserTypeOverlay_el.style.display = 'flex';
+});
