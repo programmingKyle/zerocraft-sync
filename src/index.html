@@ -65,15 +65,20 @@
       </div>
     </div>
 
-
-    <div id="hostSettingsOverlay" class="overlay" style="display: none;">
-      <div id="selectedHost" class="centered-container" style="grid-template-rows: 1fr auto; grid-gap: 5px;">
+    <div id="settingsOverlay" class="overlay" style="display: none;">
+      <div id="selectedHost" class="centered-container" style="grid-template-rows: 1fr auto; grid-gap: 5px; display: none;">
         <button id="pasteHostDataButton" class="paste-data-button">Paste Host Data</button>
         <button id="specificHostDataButton" class="specific-data-button">Enter Specifics</button>
       </div>
+
+      <div id="selectedUser" class="centered-container" style="grid-template-rows: 1fr auto; grid-gap: 5px; display: none;">
+        <button id="pasteUserDataButton" class="paste-data-button">Paste User Data</button>
+        <button id="specificUserDataButton" class="specific-data-button">Enter Specifics</button>
+      </div>
+
       <div id="hostSettingsSpecifics" class="centered-container" style="text-align: center; display: none;">
         <div style="display: grid">
-          <h2>Host Settings</h2>
+          <h2>Settings</h2>
         </div>
         <input id="serverTitleInput" type="text" placeholder="Server Name" style="text-align: center;">
         <input id="repoLinkInput" type="text" placeholder="Repo Link" style="text-align: center;">

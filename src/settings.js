@@ -1,4 +1,4 @@
-const hostSettingsOverlay_el = document.getElementById('hostSettingsOverlay');
+const settingsOverlay_el = document.getElementById('settingsOverlay');
 const settingsContent_el = document.getElementById('settingsContent');
 const mediaTypeHeader_el = document.getElementById('mediaTypeHeader');
 const serverTitleInput_el = document.getElementById('serverTitleInput');
@@ -18,7 +18,7 @@ let settings;
 let serverDirectory = null;
 
 const requiredInputs = [
-    gistIDInput_el, accessTokenInput_el, gistIDInput_el
+    gistIDInput_el, accessTokenInput_el
 ];
 
 function requiredInputCheck() {
@@ -52,7 +52,7 @@ saveSettingsButton_el.addEventListener('click', async () => {
     }
 
     await api.hostSettingsHandler({request: 'Add', settings: values});
-    hostSettingsOverlay_el.style.display = 'none';
+    settingsOverlay_el.style.display = 'none';
 
     settings = await api.hostSettingsHandler({request: 'Get'});
 
@@ -112,14 +112,14 @@ selectDirectoryButton_el.addEventListener('click', async () => {
 });
 
 toggleOptionsButton_el.addEventListener('click', () => {
-    hostSettingsOverlay_el.style.display = 'flex';
+    settingsOverlay_el.style.display = 'flex';
     selectedHost_el.style.display = 'none';
     hostSettingsSpecifics_el.style.display = 'grid';
     backSettingsButton_el.style.display = 'block';
 });
 
 backSettingsButton_el.addEventListener('click', () => {
-    hostSettingsOverlay_el.style.display = 'none';
+    settingsOverlay_el.style.display = 'none';
     serverTitleInput_el.value = settings.serverName;
     repoLinkInput_el.value = settings.repo;
     gistIDInput_el.value = settings.gistID;
@@ -146,18 +146,24 @@ const selectUserButton_el = document.getElementById('selectUserButton');
 const selectHostButton_el = document.getElementById('selectHostButton');
 const pasteHostDataButton_el = document.getElementById('pasteHostDataButton');
 const specificHostDataButton_el = document.getElementById('specificHostDataButton');
+const pasteUserDataButton_el = document.getElementById('pasteUserDataButton');
+const specificUserDataButton_el = document.getElementById('specificUserDataButton');
 
 // Overlay Content
 const selectedHost_el = document.getElementById('selectedHost');
+const selectedUser_el = document.getElementById('selectedUser');
 const hostSettingsSpecifics_el = document.getElementById('hostSettingsSpecifics');
 
 selectUserButton_el.addEventListener('click', () => {
     selectUserTypeOverlay_el.style.display = 'none';
+    settingsOverlay_el.style.display = 'flex';
+    selectedUser_el.style.display = 'grid';
 });
 
 selectHostButton_el.addEventListener('click', () => {
     selectUserTypeOverlay_el.style.display = 'none';
-    hostSettingsOverlay_el.style.display = 'flex';
+    settingsOverlay_el.style.display = 'flex';
+    selectedHost_el.style.display = 'grid';
 });
 
 pasteHostDataButton_el.addEventListener('click', async () => {
@@ -173,3 +179,26 @@ specificHostDataButton_el.addEventListener('click', () => {
     selectedHost_el.style.display = 'none';
     hostSettingsSpecifics_el.style.display = 'grid';
 });
+
+pasteUserDataButton_el.addEventListener('click', async () => {
+    selectedUser_el.style.display = 'none';
+    hostSettingsSpecifics_el.style.display = 'grid';
+    toggleHostInputs('none');
+    const clipboardValues = JSON.parse(await api.pasteSettingsClipboard());
+    gistIDInput_el.value = clipboardValues.gistID;
+    accessTokenInput_el.value = clipboardValues.accessToken;
+});
+
+specificUserDataButton_el.addEventListener('click', () => {
+    toggleHostInputs('none');
+    selectedUser_el.style.display = 'none';
+    hostSettingsSpecifics_el.style.display = 'grid';
+});
+
+function toggleHostInputs(display){
+    const hostInputs = [serverTitleInput_el, repoLinkInput_el, ipInput_el, selectedDirectoryText_el, selectDirectoryButton_el]
+    hostInputs.forEach(element => {
+        element.style.display = display;
+    });    
+
+}
