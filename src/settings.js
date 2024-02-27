@@ -1,4 +1,4 @@
-const settingsOverlay_el = document.getElementById('settingsOverlay');
+const hostSettingsOverlay_el = document.getElementById('hostSettingsOverlay');
 const settingsContent_el = document.getElementById('settingsContent');
 const mediaTypeHeader_el = document.getElementById('mediaTypeHeader');
 const serverTitleInput_el = document.getElementById('serverTitleInput');
@@ -12,10 +12,6 @@ const toggleOptionsButton_el = document.getElementById('toggleOptionsButton');
 const pasteAllSettings_el = document.getElementById('pasteAllSettings');
 const selectedDirectoryText_el = document.getElementById('selectedDirectoryText');
 const selectDirectoryButton_el = document.getElementById('selectDirectoryButton');
-
-const selectUserTypeOverlay_el = document.getElementById('selectUserTypeOverlay');
-const selectUserButton_el = document.getElementById('selectUserButton');
-const selectHostButton_el = document.getElementById('selectHostButton');
 
 let settings;
 
@@ -116,12 +112,12 @@ selectDirectoryButton_el.addEventListener('click', async () => {
 });
 
 toggleOptionsButton_el.addEventListener('click', () => {
-    settingsOverlay_el.style.display = 'flex';
+    hostSettingsOverlay_el.style.display = 'flex';
     backSettingsButton_el.style.display = 'block';
 });
 
 backSettingsButton_el.addEventListener('click', () => {
-    settingsOverlay_el.style.display = 'none';
+    hostSettingsOverlay_el.style.display = 'none';
     serverTitleInput_el.value = settings.serverName;
     repoLinkInput_el.value = settings.repo;
     gistIDInput_el.value = settings.gistID;
@@ -135,4 +131,43 @@ pasteAllSettings_el.addEventListener('click', async () => {
     repoLinkInput_el.value = clipboardValues.repo;
     gistIDInput_el.value = clipboardValues.gistID;
     accessTokenInput_el.value = clipboardValues.accessToken;
+});
+
+
+
+
+
+
+// Select User
+const selectUserTypeOverlay_el = document.getElementById('selectUserTypeOverlay');
+const selectUserButton_el = document.getElementById('selectUserButton');
+const selectHostButton_el = document.getElementById('selectHostButton');
+const pasteHostDataButton_el = document.getElementById('pasteHostDataButton');
+const specificHostDataButton_el = document.getElementById('specificHostDataButton');
+
+// Overlay Content
+const selectedHost_el = document.getElementById('selectedHost');
+const hostSettingsSpecifics_el = document.getElementById('hostSettingsSpecifics');
+
+selectUserButton_el.addEventListener('click', () => {
+    selectUserTypeOverlay_el.style.display = 'none';
+});
+
+selectHostButton_el.addEventListener('click', () => {
+    selectUserTypeOverlay_el.style.display = 'none';
+    hostSettingsOverlay_el.style.display = 'flex';
+});
+
+pasteHostDataButton_el.addEventListener('click', async () => {
+    selectedHost_el.style.display = 'none';
+    hostSettingsSpecifics_el.style.display = 'grid';
+    const clipboardValues = JSON.parse(await api.pasteSettingsClipboard());
+    repoLinkInput_el.value = clipboardValues.repo;
+    gistIDInput_el.value = clipboardValues.gistID;
+    accessTokenInput_el.value = clipboardValues.accessToken;
+});
+
+specificHostDataButton_el.addEventListener('click', () => {
+    selectedHost_el.style.display = 'none';
+    hostSettingsSpecifics_el.style.display = 'grid';
 });

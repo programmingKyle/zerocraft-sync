@@ -67,7 +67,11 @@
 
 
     <div id="hostSettingsOverlay" class="overlay" style="display: none;">
-      <div id="settingsContent" class="centered-container" style="text-align: center;">
+      <div id="selectedHost" class="centered-container" style="grid-template-rows: 1fr auto; grid-gap: 5px;">
+        <button id="pasteHostDataButton" class="paste-data-button">Paste Host Data</button>
+        <button id="specificHostDataButton" class="specific-data-button">Enter Specifics</button>
+      </div>
+      <div id="hostSettingsSpecifics" class="centered-container" style="text-align: center; display: none;">
         <div style="display: grid">
           <h2>Host Settings</h2>
         </div>

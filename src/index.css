@@ -325,3 +325,14 @@ h3.online {
   background-color:#3b4e92;
   font-size: 30px;
 }
+
+.paste-data-button {
+  height: 100%;
+  width: 100%;
+  background-color:#3b4e92;
+  padding: 10px 0px;
+}
+
+.specific-data-button {
+  padding: 10px 0px;
+}
