@@ -419,8 +419,32 @@ async function createWorldBackup() {
     archive.directory(worldDirectory, false);
     await archive.finalize();
     output.end();
+    numberOfBackupsHandler()
   } catch (error) {
     console.error('Error creating backup:', error);
+  }
+}
+
+function numberOfBackupsHandler() {
+  const userDataPath = app.getPath('userData');
+  const backupRootDir = path.join(userDataPath, 'backups');
+
+  try {
+    const backupDirs = fs.readdirSync(backupRootDir);
+    const timestamps = backupDirs.map((backupDir) => {
+      const backupPath = path.join(backupRootDir, backupDir);
+      const stat = fs.statSync(backupPath);
+      return { directory: backupPath, timestamp: stat.birthtime };
+    });
+
+    timestamps.sort((a, b) => a.timestamp - b.timestamp);
+    const backupsToDelete = timestamps.slice(0, Math.max(0, timestamps.length - 15));
+    backupsToDelete.forEach((backup) => {
+      console.log(backup.directory);
+      fs.rmSync(backup.directory, {recursive: true});
+    });
+  } catch (error) {
+    console.error('Error managing backups:', error.message);
   }
 }
 
