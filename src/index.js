@@ -659,9 +659,17 @@ ipcMain.handle('host-settings-handler', (req, data) => {
   }
 });
 
+const userDataPath = app.getPath('userData');
+const settingsFolderPath = path.join(userDataPath, 'settings');
+const settingsFile = path.join(settingsFolderPath, 'settings.json');
+
+// Ensure the settings folder exists
+if (!fs.existsSync(settingsFolderPath)) {
+  fs.mkdirSync(settingsFolderPath);
+}
 function getSettings(){
-  if (fs.existsSync('settings.json')){
-    const settingsContent = fs.readFileSync('settings.json', 'utf-8');
+  if (fs.existsSync(settingsFile)){
+    const settingsContent = fs.readFileSync(settingsFile, 'utf-8');
     settings = JSON.parse(settingsContent);
     return settings;
   } else {
@@ -671,7 +679,7 @@ function getSettings(){
 
 function addSettings(settings) {
   const jsonData = JSON.stringify(settings, null, 2);
-  fs.writeFileSync('settings.json', jsonData);
+  fs.writeFileSync(settingsFile, jsonData);
 }
 
 
